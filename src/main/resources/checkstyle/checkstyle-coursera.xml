@@ -12,10 +12,12 @@
 
     <!-- suppress certain checks on a file-by-file basis -->
     <!-- the property "suppresions" should be passed as a -D command-line option to Java -->
-    <!--<module name="SuppressionFilter">-->
-        <!--<property name="file" value="${suppressions}"/>-->
-        <!--<property name="optional" value="false"/>-->
-    <!--</module>-->
+<!--
+    <module name="SuppressionFilter">
+        <property name="file" value="${suppressions}"/>
+        <property name="optional" value="false"/>
+    </module>
+-->
 
     <!-- properties for JVM -->
     <property name="localeCountry" value="US"/>
@@ -89,6 +91,7 @@
     <module name="UniqueProperties"/>
 -->
 
+<!--
     <module name="RegexpOnFilename">
         <property name="severity" value="error"/>
         <property name="fileNamePattern" value="^(StdIn|StdOut|StdDraw|StdAudio|StdRandom|StdStats|StdArrayIO|
@@ -104,6 +107,7 @@
         <property name="ignoreFileNameExtensions" value="true"/>
         <message key = "regexp.filename.match" value="Do not submit a file with this name; it is the name of a class in ''algs4.jar''."/>
     </module>
+-->
 
     <module name="RegexpOnFilename">
         <property name="severity" value="error"/>
@@ -987,7 +991,7 @@
             <message key="import.illegal" value="Do not import ''{0}'' in this course."/>
         </module>
 
-
+<!--
         <module name="IllegalImport">
             <property name="severity" value="error"/>
             <property name="illegalPkgs" value="edu.princeton.cs.introcs,
@@ -995,6 +999,7 @@
                                                 java.io"/>
             <message key="import.illegal" value="Do not import ''{0}'' in this course. Instead, use the I/O libraries in edu.princeton.cs.algs4."/>
         </module>
+-->
 
 
     </module>
