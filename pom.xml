@@ -32,25 +32,6 @@
             </plugin>
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
-                <artifactId>exec-maven-plugin</artifactId>
-                <version>1.6.0</version>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>java</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <configuration>
-                    <mainClass>UF</mainClass>
-                    <arguments>
-                        <argument>&#60;</argument>
-                        <argument>tinyUF.txt</argument>
-                    </arguments>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
                 <artifactId>findbugs-maven-plugin</artifactId>
                 <version>3.0.5</version>
                 <configuration>
@@ -87,7 +68,7 @@
                     </execution>
                 </executions>
                 <configuration>
-                    <configLocation>src/main/resources/checkstyle/checkstyle-coursera.xml</configLocation>
+                    <configLocation>./src/main/resources/checkstyle/checkstyle-coursera.xml</configLocation>
                     <propertyExpansion>basedir=${project.basedir}</propertyExpansion>
                 </configuration>
             </plugin>

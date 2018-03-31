@@ -1,6 +1,7 @@
+package week1.lecture;
 /******************************************************************************
- *  Compilation:  javac UF.java
- *  Execution:    java UF < input.txt
+ *  Compilation:  javac week1.lecture.UF.java
+ *  Execution:    java week1.lecture.UF < input.txt
  *  Dependencies: StdIn.java StdOut.java
  *  Data files:   https://algs4.cs.princeton.edu/15uf/tinyUF.txt
  *                https://algs4.cs.princeton.edu/15uf/mediumUF.txt
@@ -8,7 +9,7 @@
  *
  *  Weighted quick-union by rank with path compression by halving.
  *
- *  % java UF < tinyUF.txt
+ *  % java week1.lecture.UF < tinyUF.txt
  *  4 3
  *  3 8
  *  6 5
@@ -23,7 +24,7 @@
 
 
 /**
- *  The {@code UF} class represents a <em>union–find data type</em>
+ *  The {@code week1.lecture.UF} class represents a <em>union–find data type</em>
  *  (also known as the <em>disjoint-sets data type</em>).
  *  It supports the <em>union</em> and <em>find</em> operations,
  *  along with a <em>connected</em> operation for determining whether

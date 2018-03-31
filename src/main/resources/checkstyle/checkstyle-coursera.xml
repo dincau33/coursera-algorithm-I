@@ -98,7 +98,7 @@
                                                   |In|Out|BinaryStdIn|BinaryStdOut|BinaryIn|BinaryOut|Draw|Picture|
                                                   |Stack|Queue|MinPQ|MaxPQ|ST|SET|
                                                   |RectHV|Point2D|
-                                                  |UF|QuickUnionUF|QuickFindUF|WeightedQuickUnionUF|
+                                                  |week1.lecture.UF|QuickUnionUF|QuickFindUF|WeightedQuickUnionUF|
                                                   |Graph|Digraph|Edge|DirectedEdge|FlowEdge|
                                                   |DirectedCycle|Topological|FordFulkerson|
                                                   |OperationCountLimitExceededException)$"/>
@@ -707,7 +707,7 @@
         </module>
 
 <!--
-	<module name="AbstractClassName"/>
+	    <module name="AbstractClassName"/>
 -->
 
         <!-- =========================================================================== -->
@@ -881,7 +881,8 @@
             <message key="illegal.token" value="Did you mean to use ''Math.pow()'' instead of the bitwise XOR operator (''^'') ?"/>
         </module>
 
-<!--  triggers too many warnings
+        <!--  triggers too many warnings -->
+<!--
         <module name="IllegalToken">
             <property name="tokens" value="TYPECAST"/>
             <message key="illegal.token" value="Avoid typecasts whenever possible."/>
@@ -894,11 +895,13 @@
             <message key="illegal.token" value="Use the primitive type ''double'' instead of the primitive type ''float''."/>
         </module>
 -->
+<!--
         <module name="IllegalToken">
             <property name="severity" value="error"/>
             <property name="tokens" value="PACKAGE_DEF"/>
             <message key="illegal.token" value="Do not define packages in this course. You must use the default (no-name) package in this course."/>
         </module>
+-->
 
         <module name="IllegalToken">
             <property name="severity" value="error"/>
@@ -959,12 +962,14 @@
         <!-- Disallowing the package also disallows all subpackages. -->
 
         <!-- everything in java.awt (and subpackages), except java.awt.Color -->
+        <!--
         <module name="IllegalImport">
             <property name="severity" value="error"/>
             <property name="regexp" value="true"/>
             <property name="illegalClasses" value="^java\.awt\.(?!Color$).*$"/>
             <message key="import.illegal" value="Do not import ''{0}'' in this course."/>
         </module>
+        -->
 
         <!-- subpackages in java.lang or java.util (but not classes in java.lang or java.util itself) -->
         <module name="IllegalImport">
