@@ -2,6 +2,7 @@ package week1.assignment;
 
 import edu.princeton.cs.introcs.StdIn;
 import edu.princeton.cs.introcs.StdOut;
+import edu.princeton.cs.introcs.StdRandom;
 import edu.princeton.cs.introcs.StdStats;
 
 public class PercolationStats {
@@ -13,14 +14,22 @@ public class PercolationStats {
         if (trials < 1) throw new IllegalArgumentException("trials " + trials + " is not higher than 1");
     }
 
+    private static double runExperiment(int n) {
+        Percolation p = new Percolation(n);
+        while (!p.percolates()) {
+            int row = StdRandom.uniform(1, n + 1);
+            int col = StdRandom.uniform(1, n + 1);
+            p.open(row, col);
+        }
+        return (double) p.numberOfOpenSites() / (n * n);
+    }
+
     // perform trials independent experiments on an n-by-n grid
     public PercolationStats(int n, int trials) {
         validate(n, trials);
         percolationStatsResult = new double[trials];
         for (int i = 0; i < trials; i++) {
-            Percolation p = new Percolation(n);
-            p.runExperiment();
-            percolationStatsResult[i] = p.percolationThreshold();
+            percolationStatsResult[i] = runExperiment(n);
         }
     }
 

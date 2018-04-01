@@ -20,7 +20,7 @@ public class Percolation {
     private int virtualBottomSiteIndex;
 
     // return site(row, col) index from uf data structure
-    public int ufSiteIndex(int row, int col) {
+    private int ufSiteIndex(int row, int col) {
         validate(row, col);
         return (row - 1) * n + col;
     }
@@ -32,12 +32,12 @@ public class Percolation {
 
     // convert column or row to the right grid index
     // for example site (1, 1) has index (0, 0) in the grid
-    public static int gridSiteIndex(int i) {
+    private static int gridSiteIndex(int i) {
         return i - 1;
     }
 
     // validate if site (row, col) is in range or not
-    public void validate(int row, int col) {
+    private void validate(int row, int col) {
         if (row < 1 || row > n) throw new IllegalArgumentException("row " + row + " is not between 1 and " + n);
         if (col < 1 || col > n) throw new IllegalArgumentException("col " + col + " is not between 1 and " + n);
     }
@@ -119,13 +119,15 @@ public class Percolation {
     }
 
     // calculate the percolation threshold
-    public double percolationThreshold() {
+    // !!! this method is private because it is not part of the assignment API and should not be exposed to PercolationStats !!!
+    private double percolationThreshold() {
         return (double) numberOfOpenSites() / (n * n);
     }
 
     // run experiment
     // open site as long as the system does not percolate
-    public void runExperiment() {
+    // !!! this method is private because it is not part of the assignment API and should not be exposed to PercolationStats !!!
+    private void runExperiment() {
         while (!percolates()) {
             int row = StdRandom.uniform(1, n + 1);
             int col = StdRandom.uniform(1, n + 1);

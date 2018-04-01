@@ -3,6 +3,11 @@ package week1.assignment;
 import edu.princeton.cs.introcs.StdOut;
 import org.junit.jupiter.api.Test;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class PercolationStatsTest {
