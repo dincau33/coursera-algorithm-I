@@ -12,16 +12,16 @@ public class PercolationTest {
     @Test
     public void testGetSiteIndexFromUF() {
         Percolation p = new Percolation(2);
-        assertThrows(IllegalArgumentException.class, () -> p.getUFSiteIndex(0, 1));
-        assertEquals(1, p.getUFSiteIndex(1, 1));
-        assertEquals(2, p.getUFSiteIndex(1, 2));
-        assertEquals(3, p.getUFSiteIndex(2, 1));
-        assertEquals(4, p.getUFSiteIndex(2, 2));
+        assertThrows(IllegalArgumentException.class, () -> p.ufSiteIndex(0, 1));
+        assertEquals(1, p.ufSiteIndex(1, 1));
+        assertEquals(2, p.ufSiteIndex(1, 2));
+        assertEquals(3, p.ufSiteIndex(2, 1));
+        assertEquals(4, p.ufSiteIndex(2, 2));
     }
 
     @Test
     public void testGetSiteIndexFromGrid() {
-        assertEquals(0, Percolation.getGridSiteIndex(1));
+        assertEquals(0, Percolation.gridSiteIndex(1));
     }
 
     @Test
@@ -142,5 +142,22 @@ public class PercolationTest {
         assertTrue(p.toString().equals("x \r\n"));
         p.open(1,1);
         assertTrue(p.toString().equals("o \r\n"));
+    }
+
+    @Test
+    public void testPercolationThreshold() {
+        Percolation p = new Percolation(3);
+        assertEquals(0.0, p.percolationThreshold());
+        p.open(2,2);
+        assertEquals((1.0 / 9.0), p.percolationThreshold());
+
+    }
+
+    @Test
+    public void testRunExperiment() {
+        Percolation p = new Percolation(1);
+        assertFalse(p.percolates());
+        p.runExperiment();
+        assertTrue(p.percolates());
     }
 }

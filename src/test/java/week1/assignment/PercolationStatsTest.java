@@ -1,0 +1,60 @@
+package week1.assignment;
+
+import edu.princeton.cs.introcs.StdOut;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+class PercolationStatsTest {
+
+    @Test
+    void testValidate() {
+        assertThrows(IllegalArgumentException.class, () -> PercolationStats.validate(-1, 1));
+        assertThrows(IllegalArgumentException.class, () -> PercolationStats.validate(0, 1));
+        assertThrows(IllegalArgumentException.class, () -> PercolationStats.validate(1, 0));
+        assertThrows(IllegalArgumentException.class, () -> PercolationStats.validate(1, -1));
+        assertThrows(IllegalArgumentException.class, () -> PercolationStats.validate(-1, -1));
+        PercolationStats.validate(1, 1);
+        PercolationStats.validate(10, 100000);
+    }
+
+    @Test
+    public void testPercolationStatsConstructor() {
+        assertThrows(IllegalArgumentException.class, () -> new PercolationStats(0, 1
+        ));
+        PercolationStats ps = new PercolationStats(1, 1);
+        assertEquals(1.0, ps.percolationStatsResult[0]);
+    }
+
+    @Test
+    void testMean() {
+        PercolationStats ps1 = new PercolationStats(1, 1);
+        assertEquals(1.0, ps1.mean());
+        PercolationStats ps2 = new PercolationStats(2, 10);
+        assertEquals(0.625, ps2.mean(), 0.125);
+    }
+
+    @Test
+    void testStddev() {
+        PercolationStats ps1 = new PercolationStats(1, 1);
+        assertTrue(Double.isNaN(ps1.stddev()));
+        PercolationStats ps2 = new PercolationStats(2, 10);
+        assertEquals(0.1, ps2.stddev(), 0.05);
+    }
+
+    @Test
+    void testConfidenceLo() {
+        PercolationStats ps1 = new PercolationStats(1, 1);
+        assertTrue(Double.isNaN(ps1.confidenceLo()));
+        PercolationStats ps2 = new PercolationStats(2, 10);
+        assertEquals(0.60, ps2.confidenceLo(), 0.1);
+    }
+
+    @Test
+    void testConfidenceHi() {
+        PercolationStats ps1 = new PercolationStats(1, 1);
+        assertTrue(Double.isNaN(ps1.confidenceHi()));
+        PercolationStats ps2 = new PercolationStats(2, 10);
+        assertEquals(0.70, ps2.confidenceHi(), 0.1);
+    }
+}
