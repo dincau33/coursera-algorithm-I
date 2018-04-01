@@ -1,5 +1,5 @@
 # Description
 Coursera Algorithm I lectures and assignments.
 
-# How to run
-`mvn clean compile` compile project and run checkstyle, findbugs and PMD.
+# How to build
+`mvn clean test` compile project, run checkstyle, findbugs, PMD, jacoco and execute unit tests.
