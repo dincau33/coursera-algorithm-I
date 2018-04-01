@@ -13,22 +13,13 @@ import static org.junit.jupiter.api.Assertions.*;
 class PercolationStatsTest {
 
     @Test
-    void testValidate() {
-        assertThrows(IllegalArgumentException.class, () -> PercolationStats.validate(-1, 1));
-        assertThrows(IllegalArgumentException.class, () -> PercolationStats.validate(0, 1));
-        assertThrows(IllegalArgumentException.class, () -> PercolationStats.validate(1, 0));
-        assertThrows(IllegalArgumentException.class, () -> PercolationStats.validate(1, -1));
-        assertThrows(IllegalArgumentException.class, () -> PercolationStats.validate(-1, -1));
-        PercolationStats.validate(1, 1);
-        PercolationStats.validate(10, 100000);
-    }
-
-    @Test
     public void testPercolationStatsConstructor() {
-        assertThrows(IllegalArgumentException.class, () -> new PercolationStats(0, 1
-        ));
+        assertThrows(IllegalArgumentException.class, () -> new PercolationStats(-1, 1));
+        assertThrows(IllegalArgumentException.class, () -> new PercolationStats(0, 1));
+        assertThrows(IllegalArgumentException.class, () -> new PercolationStats(1, 0));
+        assertThrows(IllegalArgumentException.class, () -> new PercolationStats(1, -1));
+        assertThrows(IllegalArgumentException.class, () -> new PercolationStats(-1, -1));
         PercolationStats ps = new PercolationStats(1, 1);
-        assertEquals(1.0, ps.percolationStatsResult[0]);
     }
 
     @Test

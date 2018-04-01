@@ -7,9 +7,9 @@ import edu.princeton.cs.introcs.StdStats;
 
 public class PercolationStats {
 
-    double[] percolationStatsResult;
+    private double[] percolationStatsResult;
 
-    public static void validate(int n, int trials) {
+    private static void validate(int n, int trials) {
         if (n < 1) throw new IllegalArgumentException("n " + n + " is not higher than 1");
         if (trials < 1) throw new IllegalArgumentException("trials " + trials + " is not higher than 1");
     }
