@@ -7,7 +7,19 @@ import edu.princeton.cs.introcs.StdStats;
 
 public class PercolationStats {
 
-    private double[] percolationStatsResult;
+    private static final double CONSTANT = 1.96;
+    private final double[] percolationStatsResult;
+    private double mean = Double.NaN;
+    private double stddev = Double.NaN;
+
+    // perform trials independent experiments on an n-by-n grid
+    public PercolationStats(int n, int trials) {
+        validate(n, trials);
+        percolationStatsResult = new double[trials];
+        for (int i = 0; i < trials; i++) {
+            percolationStatsResult[i] = runExperiment(n);
+        }
+    }
 
     private static void validate(int n, int trials) {
         if (n < 1) throw new IllegalArgumentException("n " + n + " is not higher than 1");
@@ -24,33 +36,30 @@ public class PercolationStats {
         return (double) p.numberOfOpenSites() / (n * n);
     }
 
-    // perform trials independent experiments on an n-by-n grid
-    public PercolationStats(int n, int trials) {
-        validate(n, trials);
-        percolationStatsResult = new double[trials];
-        for (int i = 0; i < trials; i++) {
-            percolationStatsResult[i] = runExperiment(n);
-        }
-    }
-
     // sample mean of percolation threshold
     public double mean() {
-        return StdStats.mean(percolationStatsResult);
+        if (Double.isNaN(mean)) {
+            mean = StdStats.mean(percolationStatsResult);
+        }
+        return mean;
     }
 
     // sample standard deviation of percolation threshold
     public double stddev() {
-        return StdStats.stddev(percolationStatsResult);
+        if (Double.isNaN(stddev)) {
+            stddev = StdStats.stddev(percolationStatsResult);
+        }
+        return stddev;
     }
 
     // low  endpoint of 95% confidence interval
     public double confidenceLo() {
-        return mean() - ((1.96 * stddev()) / Math.sqrt(percolationStatsResult.length));
+        return mean() - ((CONSTANT * stddev()) / Math.sqrt(percolationStatsResult.length));
     }
 
     // high endpoint of 95% confidence interval
     public double confidenceHi() {
-        return mean() + ((1.96 * stddev()) / Math.sqrt(percolationStatsResult.length));
+        return mean() + ((CONSTANT * stddev()) / Math.sqrt(percolationStatsResult.length));
     }
 
     // test client (described below)

@@ -115,12 +115,4 @@ public class PercolationTest {
         p.open(2, 1);
         assertTrue(p.percolates());
     }
-
-    @Test
-    public void testToString() {
-        Percolation p = new Percolation(1);
-        assertTrue(p.toString().equals("x \r\n"));
-        p.open(1, 1);
-        assertTrue(p.toString().equals("o \r\n"));
-    }
 }

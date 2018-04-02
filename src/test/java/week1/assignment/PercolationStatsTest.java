@@ -36,6 +36,7 @@ class PercolationStatsTest {
         assertTrue(Double.isNaN(ps1.stddev()));
         PercolationStats ps2 = new PercolationStats(2, 10);
         assertEquals(0.1, ps2.stddev(), 0.05);
+        assertEquals(0.1, ps2.stddev(), 0.05);
     }
 
     @Test
@@ -43,6 +44,7 @@ class PercolationStatsTest {
         PercolationStats ps1 = new PercolationStats(1, 1);
         assertTrue(Double.isNaN(ps1.confidenceLo()));
         PercolationStats ps2 = new PercolationStats(2, 10);
+        assertEquals(0.60, ps2.confidenceLo(), 0.1);
         assertEquals(0.60, ps2.confidenceLo(), 0.1);
     }
 

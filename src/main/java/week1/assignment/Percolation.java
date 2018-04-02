@@ -8,27 +8,36 @@ import edu.princeton.cs.algorithms.WeightedQuickUnionUF;
 public class Percolation {
 
     private int numberOfOpenSites = 0;
-    private int n;
+    private final int n;
 
     // uf uses Union Find data structure to represents all the connected path of the grid
     // uf.parents is a flatten grid in one array
     // uf.parent[0] represents the virtual top site
     // uf.parent[n * n + 1] represents the virtual bottom site
     // uf.parent[(r - 1) * n +c] represents the site located on column c and row r
-    private WeightedQuickUnionUF uf;
-    private int virtualTopSiteIndex = 0;
-    private int virtualBottomSiteIndex;
+    private final WeightedQuickUnionUF uf;
+    private final int virtualTopSiteIndex = 0;
+    private final int virtualBottomSiteIndex;
+
+    // grid is an array of array
+    // grid does not contain top and bottom virtual site
+    // Upper left site of the grid is column col = 1 and row row = 1
+    private boolean[][] grid;
+
+    // create n-by-n grid, with all sites blocked
+    public Percolation(int n) {
+        if (n < 1) throw new IllegalArgumentException("n " + n + " should be greater than 0");
+        this.n = n;
+        virtualBottomSiteIndex = n * n + 1;
+        uf = new WeightedQuickUnionUF(n * n + 2);
+        grid = new boolean[n][n];
+    }
 
     // return site(row, col) index from uf data structure
     private int ufSiteIndex(int row, int col) {
         validate(row, col);
         return (row - 1) * n + col;
     }
-
-    // grid is an array of array
-    // grid does not contain top and bottom virtual site
-    // Upper left site of the grid is column col = 1 and row row = 1
-    private boolean[][] grid;
 
     // convert column or row to the right grid index
     // for example site (1, 1) has index (0, 0) in the grid
@@ -40,15 +49,6 @@ public class Percolation {
     private void validate(int row, int col) {
         if (row < 1 || row > n) throw new IllegalArgumentException("row " + row + " is not between 1 and " + n);
         if (col < 1 || col > n) throw new IllegalArgumentException("col " + col + " is not between 1 and " + n);
-    }
-
-    // create n-by-n grid, with all sites blocked
-    public Percolation(int n) {
-        if (n < 1) throw new IllegalArgumentException("n " + n + " should be greater than 0");
-        this.n = n;
-        virtualBottomSiteIndex = n * n + 1;
-        uf = new WeightedQuickUnionUF(n * n + 2);
-        grid = new boolean[n][n];
     }
 
     // open site (row, col) if it is not open already
@@ -100,24 +100,6 @@ public class Percolation {
         return uf.connected(virtualTopSiteIndex, virtualBottomSiteIndex);
     }
 
-    // convert the system to a string
-    // open site are represented by "o"
-    // closed site are represented by "x"
-    public String toString() {
-        String output = "";
-        for (int row = 1; row <= n; row++) {
-            for (int col = 1; col <= n; col++) {
-                if (!isOpen(row, col)) {
-                    output += "x ";
-                } else {
-                    output += "o ";
-                }
-            }
-            output += "\r\n";
-        }
-        return output;
-    }
-
     // calculate the percolation threshold
     // !!! this method is private because it is not part of the assignment API and should not be exposed to PercolationStats !!!
     private double percolationThreshold() {
@@ -140,8 +122,6 @@ public class Percolation {
         int n = StdIn.readInt();
         Percolation p = new Percolation(n);
         p.runExperiment();
-        StdOut.println("Visual representation of the percolated system at the end of the simulation:");
-        StdOut.println(p.toString());
         StdOut.println("The percolation threshold is " + p.numberOfOpenSites() + "/" + n * n + " = " + p.percolationThreshold());
     }
 }
