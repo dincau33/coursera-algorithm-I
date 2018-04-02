@@ -64,8 +64,8 @@ public class PercolationStats {
 
     // test client (described below)
     public static void main(String[] args) {
-        int n = StdIn.readInt();
-        int trials = StdIn.readInt();
+        int n = Integer.parseInt(args[0]);
+        int trials = Integer.parseInt(args[1]);
         StdOut.println("Percolation experiment result with n = " + n + " and trials = " + trials);
         PercolationStats ps = new PercolationStats(n, trials);
         StdOut.println("mean                    = " + ps.mean());

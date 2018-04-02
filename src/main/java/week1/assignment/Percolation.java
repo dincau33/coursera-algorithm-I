@@ -7,17 +7,17 @@ import edu.princeton.cs.algorithms.WeightedQuickUnionUF;
 
 public class Percolation {
 
-    private int numberOfOpenSites = 0;
-    private final int n;
-
     // uf uses Union Find data structure to represents all the connected path of the grid
     // uf.parents is a flatten grid in one array
     // uf.parent[0] represents the virtual top site
     // uf.parent[n * n + 1] represents the virtual bottom site
-    // uf.parent[(r - 1) * n +c] represents the site located on column c and row r
-    private final WeightedQuickUnionUF uf;
-    private final int virtualTopSiteIndex = 0;
+    // uf.parent[(r - 1) * n + c] represents the site located on column c and row r
+    private static final int virtualTopSiteIndex = 0;
     private final int virtualBottomSiteIndex;
+    private final WeightedQuickUnionUF uf;
+
+    private int numberOfOpenSites = 0;
+    private final int n;
 
     // grid is an array of array
     // grid does not contain top and bottom virtual site
