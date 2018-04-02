@@ -1,11 +1,8 @@
 package week1.assignment;
 
+import edu.princeton.cs.introcs.StdOut;
+import edu.princeton.cs.introcs.StdRandom;
 import org.junit.jupiter.api.Test;
-
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.InputStream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -102,17 +99,24 @@ public class PercolationTest {
         assertEquals(1, p.numberOfOpenSites());
     }
 
+    private void runPercolationExperiment(int n) {
+        Percolation p = new Percolation(n);
+        while (!p.percolates()) {
+            int row = StdRandom.uniform(1, n + 1);
+            int col = StdRandom.uniform(1, n + 1);
+            p.open(row, col);
+        }
+    }
+
     @Test
     public void testPercolates() {
-        Percolation p = new Percolation(2);
-        assertFalse(p.percolates());
-        p.open(1, 1);
-        assertFalse(p.percolates());
-        p.open(1, 2);
-        assertFalse(p.percolates());
-        p.open(2, 2);
-        assertTrue(p.percolates());
-        p.open(2, 1);
-        assertTrue(p.percolates());
+        runPercolationExperiment(3);
+        runPercolationExperiment(5);
+        runPercolationExperiment(10);
+        runPercolationExperiment(10);
+        runPercolationExperiment(20);
+        runPercolationExperiment(20);
+        runPercolationExperiment(50);
+        runPercolationExperiment(50);
     }
 }

@@ -1,19 +1,24 @@
 package week1.assignment;
 
-import edu.princeton.cs.introcs.StdIn;
-import edu.princeton.cs.introcs.StdOut;
-import edu.princeton.cs.introcs.StdRandom;
 import edu.princeton.cs.algorithms.WeightedQuickUnionUF;
 
 public class Percolation {
 
-    // uf uses Union Find data structure to represents all the connected path of the grid
-    // uf.parents is a flatten grid in one array
-    // uf.parent[0] represents the virtual top site
-    // uf.parent[n * n + 1] represents the virtual bottom site
-    // uf.parent[(r - 1) * n + c] represents the site located on column c and row r
-    private static final int virtualTopSiteIndex = 0;
+    // vuf uses Union Find data structure to represents all the connected path of the grid
+    // vuf is a flatten grid in one array
+    // vuf[0] represents the virtual top site
+    // vuf[n * n + 1] represents the virtual bottom site
+    // vuf[(r - 1) * n + c] represents the site located on column c and row r
+    private static final int VIRTUAL_TOP_SITE_INDEX = 0;
     private final int virtualBottomSiteIndex;
+    private final WeightedQuickUnionUF vuf;
+
+    // uf uses Union Find data structure to represents all the connected path of the grid
+    // uf is a flatten grid in one array
+    // uf[0] represents the virtual top site
+    // uf[(r - 1) * n + c] represents the site located on column c and row r
+    // The virtual bottom site is not added to the data structure in order to solve backwash problem
+    // Read more at http://garajeando.blogspot.ca/2013/09/moocs-solved-backwash-problem-in.html
     private final WeightedQuickUnionUF uf;
 
     private int numberOfOpenSites = 0;
@@ -29,11 +34,12 @@ public class Percolation {
         if (n < 1) throw new IllegalArgumentException("n " + n + " should be greater than 0");
         this.n = n;
         virtualBottomSiteIndex = n * n + 1;
-        uf = new WeightedQuickUnionUF(n * n + 2);
+        vuf = new WeightedQuickUnionUF(n * n + 2);
+        uf = new WeightedQuickUnionUF(n * n + 1);
         grid = new boolean[n][n];
     }
 
-    // return site(row, col) index from uf data structure
+    // return site(row, col) index from vuf data structure
     private int ufSiteIndex(int row, int col) {
         validate(row, col);
         return (row - 1) * n + col;
@@ -58,21 +64,26 @@ public class Percolation {
             grid[gridSiteIndex(row)][gridSiteIndex(col)] = true;
             numberOfOpenSites++;
             if (row == 1) {
-                uf.union(virtualTopSiteIndex, ufSiteIndex(row, col));
+                vuf.union(VIRTUAL_TOP_SITE_INDEX, ufSiteIndex(row, col));
+                uf.union(VIRTUAL_TOP_SITE_INDEX, ufSiteIndex(row, col));
             }
             if (row > 1 && isOpen(row - 1, col)) {
+                vuf.union(ufSiteIndex(row, col), ufSiteIndex(row - 1, col));
                 uf.union(ufSiteIndex(row, col), ufSiteIndex(row - 1, col));
             }
             if (row < n && isOpen(row + 1, col)) {
+                vuf.union(ufSiteIndex(row, col), ufSiteIndex(row + 1, col));
                 uf.union(ufSiteIndex(row, col), ufSiteIndex(row + 1, col));
             }
             if (row == n) {
-                uf.union(virtualBottomSiteIndex, ufSiteIndex(row, col));
+                vuf.union(virtualBottomSiteIndex, ufSiteIndex(row, col));
             }
             if (col > 1 && isOpen(row, col - 1)) {
+                vuf.union(ufSiteIndex(row, col), ufSiteIndex(row, col - 1));
                 uf.union(ufSiteIndex(row, col), ufSiteIndex(row, col - 1));
             }
             if (col < n && isOpen(row, col + 1)) {
+                vuf.union(ufSiteIndex(row, col), ufSiteIndex(row, col + 1));
                 uf.union(ufSiteIndex(row, col), ufSiteIndex(row, col + 1));
             }
         }
@@ -87,7 +98,7 @@ public class Percolation {
     // is site (row, col) full?
     public boolean isFull(int row, int col) {
         validate(row, col);
-        return uf.connected(virtualTopSiteIndex, ufSiteIndex(row, col));
+        return uf.connected(VIRTUAL_TOP_SITE_INDEX, ufSiteIndex(row, col));
     }
 
     // number of open sites
@@ -97,31 +108,6 @@ public class Percolation {
 
     // does the system percolate?
     public boolean percolates() {
-        return uf.connected(virtualTopSiteIndex, virtualBottomSiteIndex);
-    }
-
-    // calculate the percolation threshold
-    // !!! this method is private because it is not part of the assignment API and should not be exposed to PercolationStats !!!
-    private double percolationThreshold() {
-        return (double) numberOfOpenSites() / (n * n);
-    }
-
-    // run experiment
-    // open site as long as the system does not percolate
-    // !!! this method is private because it is not part of the assignment API and should not be exposed to PercolationStats !!!
-    private void runExperiment() {
-        while (!percolates()) {
-            int row = StdRandom.uniform(1, n + 1);
-            int col = StdRandom.uniform(1, n + 1);
-            open(row, col);
-        }
-    }
-
-    // test client (optional)
-    public static void main(String[] args) {
-        int n = StdIn.readInt();
-        Percolation p = new Percolation(n);
-        p.runExperiment();
-        StdOut.println("The percolation threshold is " + p.numberOfOpenSites() + "/" + n * n + " = " + p.percolationThreshold());
+        return vuf.connected(VIRTUAL_TOP_SITE_INDEX, virtualBottomSiteIndex);
     }
 }
