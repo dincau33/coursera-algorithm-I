@@ -12,14 +12,14 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 public class PercolationTest {
 
     @Test
-    public void testPercolationConstructor() {
+    void testPercolationConstructor() {
         assertThrows(IllegalArgumentException.class, () -> new Percolation(0));
         assertThrows(IllegalArgumentException.class, () -> new Percolation(-1));
         Percolation p = new Percolation(1);
     }
 
     @Test
-    public void testOpen() {
+    void testOpen() {
         Percolation p = new Percolation(3);
         assertThrows(IllegalArgumentException.class, () -> p.open(0, 1));
         p.open(2, 2);
@@ -59,7 +59,7 @@ public class PercolationTest {
     }
 
     @Test
-    public void testIsOpen() {
+    void testIsOpen() {
         Percolation p = new Percolation(2);
         assertThrows(IllegalArgumentException.class, () -> p.isOpen(1, 3));
         assertThrows(IllegalArgumentException.class, () -> p.isOpen(1, 0));
@@ -78,7 +78,7 @@ public class PercolationTest {
     }
 
     @Test
-    public void testIsFull() {
+    void testIsFull() {
         Percolation p = new Percolation(2);
         assertThrows(IllegalArgumentException.class, () -> p.isFull(0, 1));
         assertFalse(p.isFull(1, 1));
@@ -92,14 +92,14 @@ public class PercolationTest {
     }
 
     @Test
-    public void testNumberOfOpenSites() {
+    void testNumberOfOpenSites() {
         Percolation p = new Percolation(2);
         assertEquals(0, p.numberOfOpenSites());
         p.open(1, 1);
         assertEquals(1, p.numberOfOpenSites());
     }
 
-    private void runPercolationExperiment(int n) {
+    void runPercolationExperiment(int n) {
         Percolation p = new Percolation(n);
         while (!p.percolates()) {
             int row = StdRandom.uniform(1, n + 1);
@@ -109,7 +109,7 @@ public class PercolationTest {
     }
 
     @Test
-    public void testPercolates() {
+    void testPercolates() {
         runPercolationExperiment(3);
         runPercolationExperiment(5);
         runPercolationExperiment(10);

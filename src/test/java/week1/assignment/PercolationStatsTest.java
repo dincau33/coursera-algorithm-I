@@ -13,7 +13,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class PercolationStatsTest {
 
     @Test
-    public void testPercolationStatsConstructor() {
+    void testPercolationStatsConstructor() {
         assertThrows(IllegalArgumentException.class, () -> new PercolationStats(-1, 1));
         assertThrows(IllegalArgumentException.class, () -> new PercolationStats(0, 1));
         assertThrows(IllegalArgumentException.class, () -> new PercolationStats(1, 0));
