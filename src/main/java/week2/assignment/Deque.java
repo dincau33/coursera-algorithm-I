@@ -5,21 +5,21 @@ import java.util.NoSuchElementException;
 
 public class Deque<Item> implements Iterable<Item> {
 
+    private int size = 0;
+    private Node<Item> head = null;
+    private Node<Item> tail = null;
+
     private class Node<Item> {
-        private Item item;
+        private final Item item;
         private Node<Item> prev;
         private Node<Item> next;
 
-        public Node(Item item, Node prev, Node next) {
+        public Node(Item item, Node<Item> prev, Node<Item> next) {
             this.item = item;
             this.prev = prev;
             this.next = next;
         }
     }
-
-    private int size = 0;
-    private Node<Item> head = null;
-    private Node<Item> tail = null;
 
     // construct an empty deque
     public Deque() {
@@ -37,7 +37,7 @@ public class Deque<Item> implements Iterable<Item> {
 
     // add the item to the front
     public void addFirst(Item item) {
-        if (item == null) throw new java.lang.IllegalArgumentException();
+        if (item == null) throw new IllegalArgumentException();
         Node<Item> oldHead = head;
         head = new Node<>(item, null, oldHead);
         if (isEmpty()) {
@@ -50,7 +50,7 @@ public class Deque<Item> implements Iterable<Item> {
 
     // add the item to the end
     public void addLast(Item item) {
-        if (item == null) throw new java.lang.IllegalArgumentException();
+        if (item == null) throw new IllegalArgumentException();
         Node<Item> oldTail = tail;
         tail = new Node<>(item, oldTail, null);
         if (isEmpty()) {
@@ -109,7 +109,7 @@ public class Deque<Item> implements Iterable<Item> {
         }
 
         public void remove() {
-            throw new java.lang.UnsupportedOperationException();
+            throw new UnsupportedOperationException();
         }
 
         public Item next() {

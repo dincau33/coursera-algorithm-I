@@ -40,7 +40,7 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
 
     // add the item
     public void enqueue(Item item) {
-        if (item == null) throw new java.lang.IllegalArgumentException();
+        if (item == null) throw new IllegalArgumentException();
         if (size == queue.length) {
             resize(queue.length * 2);
         }
@@ -75,8 +75,8 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
 
     private class RandomizedQueueIterator implements Iterator<Item> {
 
+        private final int[] randomIndex;
         private int count;
-        private int[] randomIndex;
 
         public RandomizedQueueIterator() {
             count = size - 1;
@@ -92,7 +92,7 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
         }
 
         public void remove() {
-            throw new java.lang.UnsupportedOperationException();
+            throw new UnsupportedOperationException();
         }
 
         public Item next() {
