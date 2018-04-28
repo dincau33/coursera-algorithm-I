@@ -100,7 +100,7 @@ public class Deque<Item> implements Iterable<Item> {
 
         private Node<Item> current;
 
-        public DequeIterator(Node<Item> head) {
+        private DequeIterator(Node<Item> head) {
             current = head;
         }
 
