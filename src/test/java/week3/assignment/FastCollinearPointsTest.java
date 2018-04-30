@@ -7,19 +7,19 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class FastCollinearPointsTest {
 
-    @Test
-    void numberOfSegments() {
-        assertThrows(IllegalArgumentException.class, () -> new FastCollinearPoints(null));
-        Point[] ps = getPointsFromTestFile("input3.txt");
-        FastCollinearPoints fcp = new FastCollinearPoints(ps);
-        assertEquals(0,fcp.numberOfSegments());
-        ps = getPointsFromTestFile("input6.txt");
-        fcp = new FastCollinearPoints(ps);
-        assertEquals(1,fcp.numberOfSegments());
-        ps = getPointsFromTestFile("input8.txt");
-        fcp = new FastCollinearPoints(ps);
-        assertEquals(2,fcp.numberOfSegments());
-    }
+//    @Test
+//    void numberOfSegments() {
+//        assertThrows(IllegalArgumentException.class, () -> new FastCollinearPoints(null));
+//        Point[] ps = getPointsFromTestFile("input3.txt");
+//        FastCollinearPoints fcp = new FastCollinearPoints(ps);
+//        assertEquals(0,fcp.numberOfSegments());
+//        ps = getPointsFromTestFile("input6.txt");
+//        fcp = new FastCollinearPoints(ps);
+//        assertEquals(1,fcp.numberOfSegments());
+//        ps = getPointsFromTestFile("input8.txt");
+//        fcp = new FastCollinearPoints(ps);
+//        assertEquals(2,fcp.numberOfSegments());
+//    }
 
     static Point[] getPointsFromTestFile(String fileName) {
         In in = new In("src/test/resources/week3/assignment/collinear/" + fileName);
