@@ -13,13 +13,15 @@ import static org.junit.jupiter.api.Assertions.*;
 class PercolationStatsTest {
 
     @Test
-    void testPercolationStatsConstructor() {
+    void failToCreatePercolationStatsIfGridSizeIsNegative() {
         assertThrows(IllegalArgumentException.class, () -> new PercolationStats(-1, 1));
         assertThrows(IllegalArgumentException.class, () -> new PercolationStats(0, 1));
+    }
+
+    @Test
+    void failToCreatePercolationStatsIfTrialNumberIsNegative() {
         assertThrows(IllegalArgumentException.class, () -> new PercolationStats(1, 0));
         assertThrows(IllegalArgumentException.class, () -> new PercolationStats(1, -1));
-        assertThrows(IllegalArgumentException.class, () -> new PercolationStats(-1, -1));
-        PercolationStats ps = new PercolationStats(1, 1);
     }
 
     @Test
