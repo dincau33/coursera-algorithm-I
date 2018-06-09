@@ -1,106 +1,111 @@
 package week2.assignment;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.assertj.core.api.Assertions.*;
 
 class DequeTest {
 
-    @Test
-    void isEmpty() {
-        Deque deque = new Deque<String>();
-        assertTrue(deque.isEmpty());
-        deque.addFirst("Str");
-        assertFalse(deque.isEmpty());
-        deque.removeFirst();
-        assertTrue(deque.isEmpty());
-        deque.addLast("Str");
-        assertFalse(deque.isEmpty());
-        deque.removeLast();
-        assertTrue(deque.isEmpty());
-        deque.addFirst("Str");
-        deque.addFirst("Str");
-        deque.addLast("Str");
-        deque.removeFirst();
-        deque.addFirst("Str");
-        deque.removeFirst();
-        deque.removeLast();
-        assertFalse(deque.isEmpty());
-    }
+	private Deque<String> deque;
 
-    @Test
-    void size() {
-        Deque deque = new Deque<String>();
-        assertEquals(0, deque.size());
-        deque.addFirst("Str");
-        assertEquals(1, deque.size());
-        deque.removeFirst();
-        assertEquals(0, deque.size());
-        deque.addLast("Str");
-        assertEquals(1, deque.size());
-        deque.removeLast();
-        assertEquals(0, deque.size());
-        deque.addFirst("Str");
-        deque.addFirst("Str");
-        deque.addFirst("Str");
-        deque.removeFirst();
-        deque.addFirst("Str");
-        deque.removeFirst();
-        deque.removeLast();
-        assertEquals(1, deque.size());
-    }
+	@BeforeEach
+	void setup(){
+		deque = new Deque<>();
+	}
 
-    @Test
-    void addFirst() {
-        Deque deque = new Deque<String>();
-        assertThrows(IllegalArgumentException.class, () -> deque.addFirst(null));
-    }
+	@Test
+	void newDequeIsEmpty() {
+		assertThat(deque.isEmpty()).isTrue();
+		assertThat(deque.size()).isEqualTo(0);
+	}
 
-    @Test
-    void addLast() {
-        Deque deque = new Deque<String>();
-        assertThrows(IllegalArgumentException.class, () -> deque.addLast(null));
-    }
+	@Test
+	void addFirstItemToAnEmptyDeque() {
+		deque.addFirst("Str");
+		assertThat(deque.isEmpty()).isFalse();
+		assertThat(deque.size()).isEqualTo(1);
+	}
 
-    @Test
-    void removeFirst() {
-        Deque deque = new Deque<String>();
-        assertThrows(NoSuchElementException.class, () -> deque.removeFirst());
-    }
+	@Test
+	void addLastItemToAnEmptyDeque() {
+		deque.addLast("Str");
+		assertThat(deque.isEmpty()).isFalse();
+		assertThat(deque.size()).isEqualTo(1);
+	}
 
-    @Test
-    void removeLast() {
-        Deque deque = new Deque<String>();
-        assertThrows(NoSuchElementException.class, () -> deque.removeLast());
-    }
+	@Test
+	void removeFirstItemFromOneSizeDeque() {
+		deque.addFirst("Str");
+		deque.removeFirst();
+		assertThat(deque.isEmpty()).isTrue();
+		assertThat(deque.size()).isEqualTo(0);
+	}
 
-    String dequeToString(Deque<String> d) {
-        StringBuilder s = new StringBuilder();
-        for (Object item : d) {
-            s.append(item);
-            s.append(' ');
-        }
-        return s.toString();
-    }
+	@Test
+	void removeLastItemFromOneSizeDeque() {
+		deque.addFirst("Str");
+		deque.removeLast();
+		assertThat(deque.isEmpty()).isTrue();
+		assertThat(deque.size()).isEqualTo(0);
+	}
 
-    @Test
-    void iterator() {
-        Deque deque = new Deque<String>();
-        Iterator iterator = deque.iterator();
-        assertThrows(NoSuchElementException.class, () -> iterator.next());
-        assertThrows(UnsupportedOperationException.class, () -> iterator.remove());
-        deque.addFirst("Str2");
-        deque.addLast("Str3");
-        deque.addFirst("Str1");
-        deque.addLast("Str4");
-        assertEquals("Str1 Str2 Str3 Str4 ",dequeToString(deque));
-        deque.removeFirst();
-        deque.addFirst("Str1");
-        deque.removeLast();
-        deque.addLast("Str4");
-        assertEquals("Str1 Str2 Str3 Str4 ",dequeToString(deque));
-    }
+	@Test
+	void addMultipleItemsToAnEmptyDeque(){
+		deque.addFirst("Str1");
+		deque.addLast("Str2");
+		deque.addFirst("Str3");
+		deque.addLast("Str4");
+		assertThat(deque.isEmpty()).isFalse();
+		assertThat(deque.size()).isEqualTo(4);
+	}
+
+	@Test
+	void failToAddFirstNullItemToDeque() {
+		assertThrows(IllegalArgumentException.class, () -> deque.addFirst(null));
+	}
+
+	@Test
+	void failToAddLastNullItemToDeque() {
+		assertThrows(IllegalArgumentException.class, () -> deque.addLast(null));
+	}
+
+	@Test
+	void failToRemoveFirstItemFromAnEmptyDeque() {
+		assertThrows(NoSuchElementException.class, () -> deque.removeFirst());
+	}
+
+	@Test
+	void failToRemoveLastItemFromAnEmptyDeque() {
+		assertThrows(NoSuchElementException.class, () -> deque.removeLast());
+	}
+
+	@Test
+	void failToIterateAnEmptyDeque(){
+		Iterator iterator = deque.iterator();
+		assertThrows(NoSuchElementException.class, iterator::next);
+		assertThrows(UnsupportedOperationException.class, iterator::remove);
+	}
+
+	@Test
+	void useIteratorToPrintDequeAsAString() {
+		deque.addFirst("Str2");
+		deque.addLast("Str3");
+		deque.addFirst("Str1");
+		deque.addLast("Str4");
+		assertThat(dequeToString(deque)).isEqualTo("Str1 Str2 Str3 Str4 ");
+	}
+
+	private String dequeToString(Deque<String> d) {
+		StringBuilder s = new StringBuilder();
+		for (Object item : d) {
+			s.append(item);
+			s.append(' ');
+		}
+		return s.toString();
+	}
 }
