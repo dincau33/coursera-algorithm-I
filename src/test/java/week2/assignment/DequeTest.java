@@ -14,7 +14,7 @@ class DequeTest {
 	private Deque<String> deque;
 
 	@BeforeEach
-	void setup(){
+	void setup() {
 		deque = new Deque<>();
 	}
 
@@ -28,40 +28,62 @@ class DequeTest {
 	void addFirstItemToAnEmptyDeque() {
 		deque.addFirst("Str");
 		assertThat(deque.isEmpty()).isFalse();
-		assertThat(deque.size()).isEqualTo(1);
+		assertThat(deque).hasSize(1);
 	}
 
 	@Test
 	void addLastItemToAnEmptyDeque() {
 		deque.addLast("Str");
 		assertThat(deque.isEmpty()).isFalse();
-		assertThat(deque.size()).isEqualTo(1);
+		assertThat(deque).hasSize(1).containsOnly("Str");
 	}
 
 	@Test
 	void removeFirstItemFromOneSizeDeque() {
 		deque.addFirst("Str");
-		deque.removeFirst();
+		assertThat(deque.removeFirst()).isEqualTo("Str");
 		assertThat(deque.isEmpty()).isTrue();
-		assertThat(deque.size()).isEqualTo(0);
+		assertThat(deque).hasSize(0).doesNotContain("Str");
 	}
 
 	@Test
 	void removeLastItemFromOneSizeDeque() {
 		deque.addFirst("Str");
-		deque.removeLast();
+		assertThat(deque.removeLast()).isEqualTo("Str");
 		assertThat(deque.isEmpty()).isTrue();
-		assertThat(deque.size()).isEqualTo(0);
+		assertThat(deque).hasSize(0).doesNotContain("Str");
 	}
 
 	@Test
-	void addMultipleItemsToAnEmptyDeque(){
+	void addMultipleItemsToAnEmptyDeque() {
 		deque.addFirst("Str1");
 		deque.addLast("Str2");
 		deque.addFirst("Str3");
 		deque.addLast("Str4");
 		assertThat(deque.isEmpty()).isFalse();
-		assertThat(deque.size()).isEqualTo(4);
+		assertThat(deque).hasSize(4).containsExactly("Str3", "Str1", "Str2", "Str4");
+	}
+
+	@Test
+	void removeFirstItemFromMultipleItemsDeque() {
+		deque.addFirst("Str1");
+		deque.addLast("Str2");
+		deque.addFirst("Str3");
+		deque.addLast("Str4");
+		assertThat(deque.removeFirst()).isEqualTo("Str3");
+		assertThat(deque.isEmpty()).isFalse();
+		assertThat(deque).hasSize(3).containsExactly("Str1", "Str2", "Str4");;
+	}
+
+	@Test
+	void removeLastItemFromMultipleItemsDeque() {
+		deque.addFirst("Str1");
+		deque.addLast("Str2");
+		deque.addFirst("Str3");
+		deque.addLast("Str4");
+		assertThat(deque.removeLast()).isEqualTo("Str4");
+		assertThat(deque.isEmpty()).isFalse();
+		assertThat(deque).hasSize(3).containsExactly("Str3", "Str1", "Str2");;
 	}
 
 	@Test
@@ -85,27 +107,9 @@ class DequeTest {
 	}
 
 	@Test
-	void failToIterateAnEmptyDeque(){
+	void failToIterateAnEmptyDeque() {
 		Iterator iterator = deque.iterator();
 		assertThrows(NoSuchElementException.class, iterator::next);
 		assertThrows(UnsupportedOperationException.class, iterator::remove);
-	}
-
-	@Test
-	void useIteratorToPrintDequeAsAString() {
-		deque.addFirst("Str2");
-		deque.addLast("Str3");
-		deque.addFirst("Str1");
-		deque.addLast("Str4");
-		assertThat(dequeToString(deque)).isEqualTo("Str1 Str2 Str3 Str4 ");
-	}
-
-	private String dequeToString(Deque<String> d) {
-		StringBuilder s = new StringBuilder();
-		for (Object item : d) {
-			s.append(item);
-			s.append(' ');
-		}
-		return s.toString();
 	}
 }

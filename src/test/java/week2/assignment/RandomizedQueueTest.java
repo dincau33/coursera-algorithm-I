@@ -1,80 +1,113 @@
 package week2.assignment;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class RandomizedQueueTest {
 
-    @Test
-    void isEmpty() {
-        RandomizedQueue queue = new RandomizedQueue<String>();
-        assertTrue(queue.isEmpty());
-        queue.enqueue("Str");
-        assertFalse(queue.isEmpty());
-        queue.enqueue("Str");
-        queue.enqueue("Str");
-        assertFalse(queue.isEmpty());
-        queue.dequeue();
-        queue.dequeue();
-        queue.dequeue();
-        assertTrue(queue.isEmpty());
-    }
+	private RandomizedQueue<String> queue;
 
-    @Test
-    void size() {
-        RandomizedQueue queue = new RandomizedQueue<String>();
-        assertEquals(0, queue.size());
-        queue.enqueue("Str");
-        assertEquals(1, queue.size());
-        queue.enqueue("Str");
-        queue.enqueue("Str");
-        assertEquals(3, queue.size());
-        queue.dequeue();
-        queue.dequeue();
-        queue.dequeue();
-        assertEquals(0, queue.size());
-    }
+	@BeforeEach
+	void setup() {
+		queue = new RandomizedQueue<>();
+	}
 
-    @Test
-    void enqueue() {
-        RandomizedQueue queue = new RandomizedQueue<String>();
-        assertThrows(IllegalArgumentException.class, () -> queue.enqueue(null));
-    }
+	@Test
+	void newQueueIsEmpty() {
+		assertThat(queue.isEmpty()).isTrue();
+		assertThat(queue.size()).isEqualTo(0);
+	}
 
-    @Test
-    void dequeue() {
-        RandomizedQueue queue = new RandomizedQueue<String>();
-        assertThrows(NoSuchElementException.class, () -> queue.dequeue());
-    }
+	@Test
+	void addItemToAnEmptyQueue() {
+		queue.enqueue("Str");
+		assertThat(queue.isEmpty()).isFalse();
+		assertThat(queue).hasSize(1);
+	}
 
-    @Test
-    void sample() {
-        RandomizedQueue queue = new RandomizedQueue<String>();
-        assertThrows(NoSuchElementException.class, () -> queue.sample());
-        queue.enqueue("Str");
-        assertEquals("Str", queue.sample());
-    }
+	@Test
+	void removeItemFromOneSizeDeque() {
+		queue.enqueue("Str");
+		assertThat(queue.dequeue()).isEqualTo("Str");
+		assertThat(queue.isEmpty()).isTrue();
+		assertThat(queue).hasSize(0).doesNotContain("Str");
+	}
 
-    String queueToString(RandomizedQueue<String> q) {
-        StringBuilder s = new StringBuilder();
-        for (Object item : q) {
-            s.append(item);
-            s.append(' ');
-        }
-        return s.toString();
-    }
+	@Test
+	void addMultipleItemsToAnEmptyDeque() {
+		queue.enqueue("Str1");
+		queue.enqueue("Str2");
+		queue.enqueue("Str3");
+		queue.enqueue("Str4");
+		assertThat(queue.isEmpty()).isFalse();
+		assertThat(queue).hasSize(4).containsExactlyInAnyOrder("Str1", "Str2", "Str3", "Str4");
+	}
 
-    @Test
-    void iterator() {
-        RandomizedQueue queue = new RandomizedQueue<String>();
-        Iterator iterator = queue.iterator();
-        assertThrows(NoSuchElementException.class, () -> iterator.next());
-        assertThrows(UnsupportedOperationException.class, () -> iterator.remove());
-        queue.enqueue("Str");
-        assertEquals("Str ", queueToString(queue));
-    }
+	@Test
+	void removeFirstItemFromMultipleItemsDeque() {
+		queue.enqueue("Str1");
+		queue.enqueue("Str2");
+		queue.enqueue("Str3");
+		queue.enqueue("Str4");
+		String str = queue.dequeue();
+		assertThat(queue.isEmpty()).isFalse();
+		assertThat(queue).hasSize(3).doesNotContain(str);
+	}
+
+	@Test
+	void removeAllTheItemsFromMultipleItemsDeque() {
+		queue.enqueue("Str1");
+		queue.enqueue("Str2");
+		queue.enqueue("Str3");
+		queue.enqueue("Str4");
+		queue.dequeue();
+		queue.dequeue();
+		queue.dequeue();
+		queue.dequeue();
+		assertThat(queue.isEmpty()).isTrue();
+	}
+
+	@Test
+	void failToEnqueueNullItem() {
+		assertThrows(IllegalArgumentException.class, () -> queue.enqueue(null));
+	}
+
+	@Test
+	void failToDequeueFromEmptyQueue() {
+		assertThrows(NoSuchElementException.class, queue::dequeue);
+	}
+
+	@Test
+	void failToGetSampleFromEmptyQueue() {
+		assertThrows(NoSuchElementException.class, queue::sample);
+	}
+
+	@Test
+	void getSampleFromOneItemQueue() {
+		queue.enqueue("Str");
+		assertThat(queue.sample()).isEqualTo("Str");
+	}
+
+	@Test
+	void getSampleFromMultipleItemQueue() {
+		queue.enqueue("Str1");
+		queue.enqueue("Str2");
+		queue.enqueue("Str3");
+		queue.enqueue("Str4");
+		assertThat(queue.sample()).isIn("Str1", "Str2", "Str3", "Str4");
+	}
+
+	@Test
+	void failToIterateAnEmptyQueue() {
+		RandomizedQueue queue = new RandomizedQueue<String>();
+		Iterator iterator = queue.iterator();
+		assertThrows(NoSuchElementException.class, iterator::next);
+		assertThrows(UnsupportedOperationException.class, iterator::remove);
+	}
 }

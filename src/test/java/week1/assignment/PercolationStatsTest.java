@@ -40,7 +40,7 @@ class PercolationStatsTest {
 	@Test
 	void stddevFor4CellsGrid() {
 		PercolationStats ps2 = new PercolationStats(2, 10);
-		assertThat(ps2.stddev()).isCloseTo(0.1, within(0.05));
+		assertThat(ps2.stddev()).isCloseTo(0.1, within(0.1));
 	}
 
 	@Test
@@ -64,6 +64,6 @@ class PercolationStatsTest {
 	@Test
 	void confidenceHighFor4CellsGrid() {
 		PercolationStats ps2 = new PercolationStats(2, 10);
-		assertThat(ps2.confidenceHi()).isCloseTo(0.7, within(0.1));
+		assertThat(ps2.confidenceHi()).isCloseTo(0.7, within(0.15));
 	}
 }
