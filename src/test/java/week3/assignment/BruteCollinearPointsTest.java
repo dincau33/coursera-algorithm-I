@@ -3,28 +3,15 @@ package week3.assignment;
 import org.junit.jupiter.api.Test;
 import edu.princeton.cs.introcs.In;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class BruteCollinearPointsTest {
 
-	@Test
-	void segments() {
-		assertThrows(IllegalArgumentException.class, () -> new BruteCollinearPoints(null));
-		final Point[] ps1 = new Point[1];
-		assertThrows(IllegalArgumentException.class, () -> new BruteCollinearPoints(ps1));
-		Point[] ps = getPointsFromTestFile("input3.txt");
-		BruteCollinearPoints bcp = new BruteCollinearPoints(ps);
-		assertEquals(0, bcp.numberOfSegments());
-		ps = getPointsFromTestFile("input6.txt");
-		bcp = new BruteCollinearPoints(ps);
-		assertEquals(5, bcp.numberOfSegments());
-		ps = getPointsFromTestFile("input8.txt");
-		bcp = new BruteCollinearPoints(ps);
-		assertEquals(2, bcp.numberOfSegments());
-	}
+	private static final String FILE_PATH_FOLDER = "./src/test/resources/week3/assignment/collinear/";
 
-	static Point[] getPointsFromTestFile(String fileName) {
-		In in = new In("src/test/resources/week3/assignment/collinear/" + fileName);
+	private static Point[] getPointsFromFile(String filePath) {
+		In in = new In(filePath);
 		int N = in.readInt();
 		Point[] points = new Point[N];
 		for (int i = 0; i < N; i++) {
@@ -34,4 +21,62 @@ class BruteCollinearPointsTest {
 		}
 		return points;
 	}
+
+	@Test
+	void failToFindCollinearPointsOfNullPointsList() {
+		assertThrows(IllegalArgumentException.class, () -> new BruteCollinearPoints(null));
+	}
+
+	@Test
+	void failToFindCollinearPointsOfEmptyPointsList() {
+		final Point[] ps = new Point[1];
+		assertThrows(IllegalArgumentException.class, () -> new BruteCollinearPoints(ps));
+	}
+
+	@Test
+	void failToFindCollinearPointsOfPointsListContainingANullPoint() {
+		final Point[] ps = new Point[2];
+		ps[0] = new Point(0, 0);
+		ps[1] = null;
+		assertThrows(IllegalArgumentException.class, () -> new BruteCollinearPoints(ps));
+	}
+
+	@Test
+	void failToFindCollinearPointsOfTwoPointsListContainingDuplicatePoints() {
+		final Point[] ps = new Point[2];
+		ps[0] = new Point(0, 0);
+		ps[1] = new Point(0, 0);
+		assertThrows(IllegalArgumentException.class, () -> new BruteCollinearPoints(ps));
+	}
+
+	@Test
+	void failToFindCollinearPointsOfThreePointsListContainingDuplicatePoints() {
+		final Point[] ps = new Point[3];
+		ps[0] = new Point(0, 0);
+		ps[1] = new Point(1, 0);
+		ps[2] = new Point(0, 0);
+		assertThrows(IllegalArgumentException.class, () -> new BruteCollinearPoints(ps));
+	}
+
+	@Test
+	void input3ContainsZeroSegment() {
+		Point[] ps = getPointsFromFile(FILE_PATH_FOLDER + "input3.txt");
+		BruteCollinearPoints bcp = new BruteCollinearPoints(ps);
+		assertThat(bcp.numberOfSegments()).isEqualTo(0);
+	}
+
+	@Test
+	void input6Contains5Segment() {
+		Point[] ps = getPointsFromFile(FILE_PATH_FOLDER + "input6.txt");
+		BruteCollinearPoints bcp = new BruteCollinearPoints(ps);
+		assertThat(bcp.numberOfSegments()).isEqualTo(5);
+	}
+
+	@Test
+	void input8Contains2Segment() {
+		Point[] ps = getPointsFromFile(FILE_PATH_FOLDER + "input8.txt");
+		BruteCollinearPoints bcp = new BruteCollinearPoints(ps);
+		assertThat(bcp.numberOfSegments()).isEqualTo(2);
+	}
+
 }

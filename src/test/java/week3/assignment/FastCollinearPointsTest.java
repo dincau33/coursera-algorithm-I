@@ -21,15 +21,15 @@ class FastCollinearPointsTest {
 //        assertEquals(2,fcp.numberOfSegments());
 //    }
 
-    static Point[] getPointsFromTestFile(String fileName) {
-        In in = new In("src/test/resources/week3/assignment/collinear/" + fileName);
-        int N = in.readInt();
-        Point[] points = new Point[N];
-        for (int i = 0; i < N; i++) {
-            int x = in.readInt();
-            int y = in.readInt();
-            points[i] = new Point(x, y);
-        }
-        return points;
-    }
+	static Point[] getPointsFromTestFile(String fileName) {
+		In in = new In("src/test/resources/week3/assignment/collinear/" + fileName);
+		int N = in.readInt();
+		Point[] points = new Point[N];
+		for (int i = 0; i < N; i++) {
+			int x = in.readInt();
+			int y = in.readInt();
+			points[i] = new Point(x, y);
+		}
+		return points;
+	}
 }

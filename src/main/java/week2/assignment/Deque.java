@@ -93,16 +93,12 @@ public class Deque<Item> implements Iterable<Item> {
 
 	// return an iterator over items in order from front to end
 	public Iterator<Item> iterator() {
-		return new DequeIterator(head);
+		return new DequeIterator();
 	}
 
 	private class DequeIterator implements Iterator<Item> {
 
-		private Node<Item> current;
-
-		private DequeIterator(Node<Item> head) {
-			current = head;
-		}
+		private Node<Item> current = head;
 
 		public boolean hasNext() {
 			return current != null;
