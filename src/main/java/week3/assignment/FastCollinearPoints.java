@@ -5,7 +5,8 @@ import java.util.Arrays;
 
 public class FastCollinearPoints {
 
-	private ArrayList<LineSegment> segments = new ArrayList<>();
+	private final ArrayList<LineSegment> segments = new ArrayList<>();
+	private final ArrayList<Double> segmentsSlope = new ArrayList<>();
 
 	// finds all line segments containing 4 or more points
 	public FastCollinearPoints(Point[] points) {
@@ -33,15 +34,29 @@ public class FastCollinearPoints {
 						&& Double.compare(p.slopeTo(pointsCopy[first]), p.slopeTo(pointsCopy[last])) == 0) {
 					last++;
 				}
-				// if found at least 3 elements, make segment if it's unique
-				if (last - first >= 3 && p.compareTo(pointsCopy[first]) < 0) {
-					segments.add(new LineSegment(p, pointsCopy[last - 1]));
+				// if found at least 3 elements
+				if (last - first >= 3) {
+					double segmentSlope = p.slopeTo(pointsCopy[last - 1]);
+					// make segment if it's unique
+					if (!containSegment(segmentSlope)) {
+						segments.add(new LineSegment(p, pointsCopy[last - 1]));
+						segmentsSlope.add(segmentSlope);
+					}
 				}
 				// Try to find next
 				first = last;
 			}
 
 		}
+	}
+
+	private boolean containSegment(Double s) {
+		for (Double slope : segmentsSlope) {
+			if (Double.compare(slope, s) == 0) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	// the number of line segments

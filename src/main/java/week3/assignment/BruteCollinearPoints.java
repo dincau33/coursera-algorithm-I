@@ -30,7 +30,7 @@ public class BruteCollinearPoints {
 						double S0 = pointsCopy[i].slopeTo(pointsCopy[j]);
 						double S1 = pointsCopy[i].slopeTo(pointsCopy[k]);
 						double S2 = pointsCopy[i].slopeTo(pointsCopy[m]);
-						if (S0 == S1 && S1 == S2) {
+						if (Double.compare(S0, S1) == 0 && Double.compare(S1, S2) == 0) {
 							segments.add(new LineSegment(pointsCopy[i], pointsCopy[m]));
 						}
 					}
