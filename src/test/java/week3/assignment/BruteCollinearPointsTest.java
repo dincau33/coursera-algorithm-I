@@ -59,6 +59,13 @@ class BruteCollinearPointsTest {
 	}
 
 	@Test
+	void equidistantContains4Segment() {
+		Point[] ps = getPointsFromFile(FILE_PATH_FOLDER + "equidistant.txt");
+		BruteCollinearPoints bcp = new BruteCollinearPoints(ps);
+		assertThat(bcp.numberOfSegments()).isEqualTo(4);
+	}
+
+	@Test
 	void input3ContainsZeroSegment() {
 		Point[] ps = getPointsFromFile(FILE_PATH_FOLDER + "input3.txt");
 		BruteCollinearPoints bcp = new BruteCollinearPoints(ps);
@@ -77,6 +84,62 @@ class BruteCollinearPointsTest {
 		Point[] ps = getPointsFromFile(FILE_PATH_FOLDER + "input8.txt");
 		BruteCollinearPoints bcp = new BruteCollinearPoints(ps);
 		assertThat(bcp.numberOfSegments()).isEqualTo(2);
+	}
+
+	@Test
+	void input40Contains4Segment() {
+		Point[] ps = getPointsFromFile(FILE_PATH_FOLDER + "input40.txt");
+		BruteCollinearPoints bcp = new BruteCollinearPoints(ps);
+		assertThat(bcp.numberOfSegments()).isEqualTo(4);
+	}
+
+	@Test
+	void input48Contains6Segment() {
+		Point[] ps = getPointsFromFile(FILE_PATH_FOLDER + "input48.txt");
+		BruteCollinearPoints bcp = new BruteCollinearPoints(ps);
+		assertThat(bcp.numberOfSegments()).isEqualTo(6);
+	}
+
+	@Test
+	void horizontal5Contains5Segment() {
+		Point[] ps = getPointsFromFile(FILE_PATH_FOLDER + "horizontal5.txt");
+		BruteCollinearPoints bcp = new BruteCollinearPoints(ps);
+		assertThat(bcp.numberOfSegments()).isEqualTo(5);
+	}
+
+	@Test
+	void horizontal25Contains25Segment() {
+		Point[] ps = getPointsFromFile(FILE_PATH_FOLDER + "horizontal25.txt");
+		BruteCollinearPoints bcp = new BruteCollinearPoints(ps);
+		assertThat(bcp.numberOfSegments()).isEqualTo(25);
+	}
+
+	@Test
+	void vertical5Contains5Segment() {
+		Point[] ps = getPointsFromFile(FILE_PATH_FOLDER + "vertical5.txt");
+		BruteCollinearPoints bcp = new BruteCollinearPoints(ps);
+		assertThat(bcp.numberOfSegments()).isEqualTo(5);
+	}
+
+	@Test
+	void vertical25Contains25Segment() {
+		Point[] ps = getPointsFromFile(FILE_PATH_FOLDER + "vertical25.txt");
+		BruteCollinearPoints bcp = new BruteCollinearPoints(ps);
+		assertThat(bcp.numberOfSegments()).isEqualTo(25);
+	}
+
+	@Test
+	void random23ContainsNoSegment() {
+		Point[] ps = getPointsFromFile(FILE_PATH_FOLDER + "random23.txt");
+		BruteCollinearPoints bcp = new BruteCollinearPoints(ps);
+		assertThat(bcp.numberOfSegments()).isEqualTo(0);
+	}
+
+	@Test
+	void random38ContainsNoSegment() {
+		Point[] ps = getPointsFromFile(FILE_PATH_FOLDER + "random38.txt");
+		BruteCollinearPoints bcp = new BruteCollinearPoints(ps);
+		assertThat(bcp.numberOfSegments()).isEqualTo(0);
 	}
 
 }

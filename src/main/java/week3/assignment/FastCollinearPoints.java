@@ -6,7 +6,6 @@ import java.util.Arrays;
 public class FastCollinearPoints {
 
 	private final ArrayList<LineSegment> segments = new ArrayList<>();
-	private final ArrayList<Double> segmentsSlope = new ArrayList<>();
 
 	// finds all line segments containing 4 or more points
 	public FastCollinearPoints(Point[] points) {
@@ -17,46 +16,34 @@ public class FastCollinearPoints {
 		}
 
 		int n = points.length;
-		Point[] pointsCopy = Arrays.copyOf(points, n);
-		Arrays.sort(pointsCopy);
+		Point[] slopeOrderPoints = Arrays.copyOf(points, n);
+		Point[] sortedPoints = Arrays.copyOf(points, n);
+		Arrays.sort(sortedPoints);
 
-		if (hasDuplicate(pointsCopy)) {
+		if (hasDuplicate(sortedPoints)) {
 			throw new IllegalArgumentException();
 		}
 
 		for (int i = 0; i < n; i++) {
-			Point p = pointsCopy[i];
-			Arrays.sort(pointsCopy, p.slopeOrder());
-
+			Point p = sortedPoints[i];
+			Arrays.sort(slopeOrderPoints);
+			Arrays.sort(slopeOrderPoints, p.slopeOrder());
 			for (int first = 1, last = 2; last < n; last++) {
 				// find last collinear to p point
 				while (last < n
-						&& Double.compare(p.slopeTo(pointsCopy[first]), p.slopeTo(pointsCopy[last])) == 0) {
+						&& Double.compare(p.slopeTo(slopeOrderPoints[first]), p.slopeTo(slopeOrderPoints[last])) == 0) {
 					last++;
 				}
 				// if found at least 3 elements
-				if (last - first >= 3) {
-					double segmentSlope = p.slopeTo(pointsCopy[last - 1]);
-					// make segment if it's unique
-					if (!containSegment(segmentSlope)) {
-						segments.add(new LineSegment(p, pointsCopy[last - 1]));
-						segmentsSlope.add(segmentSlope);
-					}
+				// if point is lower than second point of the segment. if not it means the segment has been already added
+				if (last - first >= 3 && p.compareTo(slopeOrderPoints[first]) < 0) {
+					segments.add(new LineSegment(p, slopeOrderPoints[last - 1]));
 				}
+
 				// Try to find next
 				first = last;
 			}
-
 		}
-	}
-
-	private boolean containSegment(Double s) {
-		for (Double slope : segmentsSlope) {
-			if (Double.compare(slope, s) == 0) {
-				return true;
-			}
-		}
-		return false;
 	}
 
 	// the number of line segments
