@@ -1,11 +1,16 @@
 package week4.assignment;
 
+import edu.princeton.cs.introcs.StdRandom;
+
+import java.util.Stack;
+
 public class Board {
 
 	private final int[][] blocks;
 	private final int n;
 	private int hamming = -1;
 	private int manhattan = -1;
+	private Board twin = null;
 
 	private static void validateBlocks(int[][] blocks) {
 		if (blocks == null) throw new IllegalArgumentException();
@@ -38,44 +43,46 @@ public class Board {
 
 	// number of blocks out of place
 	public int hamming() {
+		// caching
 		if (hamming != -1) {
 			return hamming;
-		} else {
-			int tmp = 0;
-			for (int i = 0; i < n; i++) {
-				for (int j = 0; j < n; j++) {
-					if (blocks[i][j] != 0 && !matchGoalBlock(i, j)) tmp++;
-				}
-			}
-			hamming = tmp;
-			return hamming;
 		}
+
+		int tmp = 0;
+		for (int i = 0; i < n; i++) {
+			for (int j = 0; j < n; j++) {
+				if (blocks[i][j] != 0 && !matchGoalBlock(i, j)) tmp++;
+			}
+		}
+		hamming = tmp;
+		return hamming;
 	}
 
-	private int movesToReachRightPosition(int block, int row, int col) {
+	private int movesToTargetPosition(int block, int currentRow, int currentCol) {
 		int targetRow = (block - 1) / n;
 		int targetCol = (block - 1) % n;
-		int horizontalMove = Math.abs(targetRow - row);
-		int verticalMove = Math.abs(targetCol - col);
-		return horizontalMove + verticalMove;
+		int horizontalMoves = Math.abs(targetRow - currentRow);
+		int verticalMoves = Math.abs(targetCol - currentCol);
+		return horizontalMoves + verticalMoves;
 	}
 
 	// sum of Manhattan distances between blocks and goal
 	public int manhattan() {
+		//caching
 		if (manhattan != -1) {
 			return manhattan;
-		} else {
-			int tmp = 0;
-			for (int i = 0; i < n; i++) {
-				for (int j = 0; j < n; j++) {
-					if (blocks[i][j] != 0 && !matchGoalBlock(i, j)) {
-						tmp += movesToReachRightPosition(blocks[i][j], i, j);
-					}
+		}
+
+		int tmp = 0;
+		for (int i = 0; i < n; i++) {
+			for (int j = 0; j < n; j++) {
+				if (blocks[i][j] != 0 && !matchGoalBlock(i, j)) {
+					tmp += movesToTargetPosition(blocks[i][j], i, j);
 				}
 			}
-			manhattan = tmp;
-			return manhattan;
 		}
+		manhattan = tmp;
+		return manhattan;
 	}
 
 	// is this blocks the goal blocks?
@@ -92,9 +99,56 @@ public class Board {
 		return isGoal;
 	}
 
+	private int[][] getBlocksCopy() {
+		int[][] blocksCopy = new int[n][n];
+
+		for (int i = 0; i < n; i++) {
+			for (int j = 0; j < n; j++) {
+				blocksCopy[i][j] = blocks[i][j];
+				}
+			}
+
+		return blocksCopy;
+	}
+
+	private static void exchBlock(int[][] block, int currentRow, int currentCol, int targetRow, int targetCol) {
+		int swap = block[targetRow][targetCol];
+		block[targetRow][targetCol] = block[currentRow][currentCol];
+		block[currentRow][currentCol] = swap;
+	}
+
 	// a blocks that is obtained by exchanging any pair of blocks
 	public Board twin() {
-		return null;
+		if (twin != null) {
+			return twin;
+		}
+
+		// Find source block to swap
+		boolean sourceBlockSelected = false;
+		int sourceRow = -1;
+		int sourceCol = -1;
+		while (!sourceBlockSelected) {
+			sourceRow = StdRandom.uniform(n - 1);
+			sourceCol = StdRandom.uniform(n - 1);
+			if (blocks[sourceRow][sourceCol] != 0) sourceBlockSelected = true;
+		}
+
+		// Find target block to swap
+		boolean targetBlockSelected = false;
+		int targetRow = -1;
+		int targetCol = -1;
+		while (!targetBlockSelected) {
+			targetRow = StdRandom.uniform(n - 1);
+			targetCol = StdRandom.uniform(n - 1);
+			if (targetRow != sourceRow && targetCol != sourceCol) {
+				if (blocks[targetRow][targetCol] != 0) targetBlockSelected = true;
+			}
+		}
+
+		int[][] twinBlocks = getBlocksCopy();
+		exchBlock(twinBlocks, sourceRow, sourceCol, targetRow, targetCol);
+
+		return new Board(twinBlocks);
 	}
 
 	// does this blocks equal y?
@@ -122,7 +176,50 @@ public class Board {
 
 	// all neighboring boards
 	public Iterable<Board> neighbors() {
-		return null;
+		Stack<Board> neighbors = new Stack<>();
+
+		// Find empty block
+		int emptyBlockRow = -1;
+		int emptyBlockCol = -1;
+		for (int i = 0; i < n; i++) {
+			for (int j = 0; j < n; j++) {
+				if (blocks[i][j] == 0) {
+					emptyBlockRow = i;
+					emptyBlockCol = j;
+					break;
+				}
+			}
+		}
+
+		// Create neighbor by swapping empty block left
+		if (emptyBlockCol > 0) {
+			int[][] blocksCopy = getBlocksCopy();
+			exchBlock(blocksCopy, emptyBlockRow, emptyBlockCol, emptyBlockRow, emptyBlockCol - 1);
+			neighbors.add(new Board(blocksCopy));
+		}
+
+		// Create neighbor by swapping empty block right
+		if (emptyBlockCol < n - 1) {
+			int[][] blocksCopy = getBlocksCopy();
+			exchBlock(blocksCopy, emptyBlockRow, emptyBlockCol, emptyBlockRow, emptyBlockCol + 1);
+			neighbors.add(new Board(blocksCopy));
+		}
+
+		// Create neighbor by swapping empty block up
+		if (emptyBlockRow > 0) {
+			int[][] blocksCopy = getBlocksCopy();
+			exchBlock(blocksCopy, emptyBlockRow, emptyBlockCol, emptyBlockRow - 1, emptyBlockCol);
+			neighbors.add(new Board(blocksCopy));
+		}
+
+		// Create neighbor by swapping empty block down
+		if (emptyBlockRow < n -1) {
+			int[][] blocksCopy = getBlocksCopy();
+			exchBlock(blocksCopy, emptyBlockRow, emptyBlockCol, emptyBlockRow + 1, emptyBlockCol);
+			neighbors.add(new Board(blocksCopy));
+		}
+
+		return neighbors;
 	}
 
 	// string representation of this blocks (in the output format specified below)

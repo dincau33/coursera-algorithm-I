@@ -138,9 +138,47 @@ class BoardTest {
 		assertThat(board1.equals(board2)).isTrue();
 	}
 
-//	@Test
-//	void hammingOfPuzzle3x3_00AfterTwinGenerationIs1(){
-//		Board board = getBoardFromFile(FILE_PATH_FOLDER + "puzzle3x3-00.txt");
-//		assertThat(board.twin().hamming()).isEqualTo(1);
-//	}
+	@Test
+	void hammingOfPuzzle3x3_00AfterTwinGenerationIs1(){
+		Board board = getBoardFromFile(FILE_PATH_FOLDER + "puzzle3x3-00.txt");
+		assertThat(board.twin().hamming()).isEqualTo(2);
+	}
+
+	@Test
+	void hammingOfPuzzle4x4_00AfterTwinGenerationIs1(){
+		Board board = getBoardFromFile(FILE_PATH_FOLDER + "puzzle4x4-00.txt");
+		assertThat(board.twin().hamming()).isEqualTo(2);
+	}
+
+	@Test
+	void Puzzle3x3_00Has2Neighbors() {
+		Board board = getBoardFromFile(FILE_PATH_FOLDER + "puzzle3x3-00.txt");
+		assertThat(board.neighbors()).hasSize(2);
+	}
+
+	@Test
+	void Puzzle3x3_01HasTheGoalBoardAsNeighbors() {
+		Board board = getBoardFromFile(FILE_PATH_FOLDER + "puzzle3x3-01.txt");
+		Board goalBoard = getBoardFromFile(FILE_PATH_FOLDER + "puzzle3x3-00.txt");
+
+		Iterable<Board> neighbors = board.neighbors();
+
+		assertThat(neighbors).hasSize(3);
+
+		boolean containsGoalBoard = false;
+		for(Board b:neighbors) {
+			if (b.equals(goalBoard)) {
+				containsGoalBoard = true;
+				break;
+			}
+		}
+
+		assertThat(containsGoalBoard).isTrue();
+	}
+
+	@Test
+	void Puzzle3x3_02Has4Neighbors() {
+		Board board = getBoardFromFile(FILE_PATH_FOLDER + "puzzle3x3-02.txt");
+		assertThat(board.neighbors()).hasSize(4);
+	}
 }
