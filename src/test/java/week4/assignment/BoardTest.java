@@ -76,9 +76,27 @@ class BoardTest {
 	}
 
 	@Test
-	void manhattanOfOfPuzzle3x3_10Is8() {
+	void manathanOfOfPuzzle3x3_02Is2() {
+		Board board = getBoardFromFile(FILE_PATH_FOLDER + "puzzle3x3-02.txt");
+		assertThat(board.manhattan()).isEqualTo(2);
+	}
+
+	@Test
+	void manhattanOfOfPuzzle3x3_10Is10() {
 		Board board = getBoardFromFile(FILE_PATH_FOLDER + "puzzle3x3-10.txt");
 		assertThat(board.manhattan()).isEqualTo(10);
+	}
+
+	@Test
+	void manathanOfOfPuzzle3x3_20Is12() {
+		Board board = getBoardFromFile(FILE_PATH_FOLDER + "puzzle3x3-20.txt");
+		assertThat(board.manhattan()).isEqualTo(12);
+	}
+
+	@Test
+	void manathanOfOfPuzzle3x3_31Is21() {
+		Board board = getBoardFromFile(FILE_PATH_FOLDER + "puzzle3x3-31.txt");
+		assertThat(board.manhattan()).isEqualTo(21);
 	}
 
 	@Test

@@ -1,12 +1,36 @@
 package week4.assignment;
 
+import edu.princeton.cs.algorithms.MinPQ;
 import edu.princeton.cs.introcs.In;
 import edu.princeton.cs.introcs.StdOut;
 
+import java.util.ArrayList;
+
 public class Solver {
+
+	private final ArrayList<Board> boardsSequence = new ArrayList<>();
+	private final MinPQ<SearchNode> priorityQueue = new MinPQ<>();
+	private SearchNode current;
 
 	// find a solution to the initial board (using the A* algorithm)
 	public Solver(Board initial) {
+
+		if (initial == null) throw new IllegalArgumentException();
+
+		current = new SearchNode(initial, null, 0);
+
+		while (!current.board.isGoal()) {
+			boardsSequence.add(current.board);
+
+			for (Board neighbor : current.board.neighbors()) {
+				if (current.previous == null || !neighbor.equals(current.previous.board)) {
+					SearchNode next = new SearchNode(neighbor, current, current.moves + 1);
+					priorityQueue.insert(next);
+				}
+			}
+
+			current = priorityQueue.delMin();
+		}
 
 	}
 
@@ -17,12 +41,13 @@ public class Solver {
 
 	// min number of moves to solve initial board; -1 if unsolvable
 	public int moves() {
-		return 0;
+		if (!isSolvable()) return -1;
+		else return current.moves;
 	}
 
 	// sequence of boards in a shortest solution; null if unsolvable
 	public Iterable<Board> solution() {
-		return null;
+		return boardsSequence;
 	}
 
 	// solve a slider puzzle (given below)
@@ -47,6 +72,27 @@ public class Solver {
 			StdOut.println("Minimum number of moves = " + solver.moves());
 			for (Board board : solver.solution())
 				StdOut.println(board);
+		}
+	}
+
+	private class SearchNode implements Comparable<SearchNode> {
+
+		private final Board board;
+		private final SearchNode previous;
+		private final int moves;
+		private final int priority;
+
+		private SearchNode(Board board, SearchNode previous, int moves) {
+			if (board == null) throw new IllegalArgumentException();
+
+			this.board = board;
+			this.previous = previous;
+			this.moves = moves;
+			this.priority = this.board.manhattan() + this.moves;
+		}
+
+		public int compareTo(SearchNode that) {
+			return this.priority - that.priority;
 		}
 	}
 }

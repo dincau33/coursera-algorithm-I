@@ -10,13 +10,7 @@ public class Board {
 	private final int n;
 	private int hamming = -1;
 	private int manhattan = -1;
-	private Board twin = null;
-
-	private static void validateBlocks(int[][] blocks) {
-		if (blocks == null) throw new IllegalArgumentException();
-		if (blocks.length < 2) throw new IllegalArgumentException();
-		if (blocks.length > 127) throw new IllegalArgumentException();
-	}
+	private final Board twin = null;
 
 	// construct a blocks from an n-by-n array of blocks
 	// (where blocks[i][j] = block in row i, column j)
@@ -26,6 +20,12 @@ public class Board {
 
 		this.blocks = blocks;
 		n = blocks.length;
+	}
+
+	private static void validateBlocks(int[][] blocks) {
+		if (blocks == null) throw new IllegalArgumentException();
+		if (blocks.length < 2) throw new IllegalArgumentException();
+		if (blocks.length > 127) throw new IllegalArgumentException();
 	}
 
 	// blocks dimension n
@@ -105,8 +105,8 @@ public class Board {
 		for (int i = 0; i < n; i++) {
 			for (int j = 0; j < n; j++) {
 				blocksCopy[i][j] = blocks[i][j];
-				}
 			}
+		}
 
 		return blocksCopy;
 	}
@@ -119,9 +119,9 @@ public class Board {
 
 	// a blocks that is obtained by exchanging any pair of blocks
 	public Board twin() {
-		if (twin != null) {
-			return twin;
-		}
+//		if (twin != null) {
+//			return twin;
+//		}
 
 		// Find source block to swap
 		boolean sourceBlockSelected = false;
@@ -213,7 +213,7 @@ public class Board {
 		}
 
 		// Create neighbor by swapping empty block down
-		if (emptyBlockRow < n -1) {
+		if (emptyBlockRow < n - 1) {
 			int[][] blocksCopy = getBlocksCopy();
 			exchBlock(blocksCopy, emptyBlockRow, emptyBlockCol, emptyBlockRow + 1, emptyBlockCol);
 			neighbors.add(new Board(blocksCopy));
