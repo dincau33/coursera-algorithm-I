@@ -28,13 +28,38 @@ class SolverTest {
 	}
 
 	@Test
+	void puzzle00IsAlreadySolved() {
+		Board board = getBoardFromFile(FILE_PATH_FOLDER + "puzzle00.txt");
+		Solver solver = new Solver(board);
+
+		assertThat(solver.isSolvable()).isTrue();
+		assertThat(solver.moves()).isEqualTo(0);
+		assertThat(solver.solution()).hasSize(1);
+		assertThat(solver.solution()).contains(board);
+	}
+
+	@Test
+	void puzzle01CanBeSolvedIn1Move() {
+		Board board = getBoardFromFile(FILE_PATH_FOLDER + "puzzle01.txt");
+		Solver solver = new Solver(board);
+
+		assertThat(solver.isSolvable()).isTrue();
+		assertThat(solver.moves()).isEqualTo(1);
+
+		Iterable<Board> solution = solver.solution();
+
+		assertThat(solution).hasSize(2);
+		assertThat(solution.iterator().next()).isEqualTo(board);
+
+	}
+
+	@Test
 	void puzzle3x3_00IsAlreadySolved() {
 		Board board = getBoardFromFile(FILE_PATH_FOLDER + "puzzle3x3-00.txt");
 		Solver solver = new Solver(board);
 
 		assertThat(solver.isSolvable()).isTrue();
 		assertThat(solver.moves()).isEqualTo(0);
-		assertThat(solver.solution()).isEmpty();
 	}
 
 	@Test
@@ -44,8 +69,6 @@ class SolverTest {
 
 		assertThat(solver.isSolvable()).isTrue();
 		assertThat(solver.moves()).isEqualTo(1);
-		assertThat(solver.solution()).hasSize(1);
-		assertThat(solver.solution()).contains(board);
 	}
 
 	@Test
@@ -55,12 +78,6 @@ class SolverTest {
 
 		assertThat(solver.isSolvable()).isTrue();
 		assertThat(solver.moves()).isEqualTo(2);
-		assertThat(solver.solution()).hasSize(2);
-		assertThat(solver.solution()).contains(board);
-
-		for (Board b : solver.solution()) {
-			System.out.println(b);
-		}
 	}
 
 	@Test
@@ -70,8 +87,6 @@ class SolverTest {
 
 		assertThat(solver.isSolvable()).isTrue();
 		assertThat(solver.moves()).isEqualTo(3);
-		assertThat(solver.solution()).hasSize(3);
-		assertThat(solver.solution()).contains(board);
 	}
 
 	@Test
@@ -81,8 +96,6 @@ class SolverTest {
 
 		assertThat(solver.isSolvable()).isTrue();
 		assertThat(solver.moves()).isEqualTo(5);
-		assertThat(solver.solution()).hasSize(5);
-		assertThat(solver.solution()).contains(board);
 	}
 
 	@Test
@@ -92,8 +105,6 @@ class SolverTest {
 
 		assertThat(solver.isSolvable()).isTrue();
 		assertThat(solver.moves()).isEqualTo(9);
-		assertThat(solver.solution()).hasSize(9);
-		assertThat(solver.solution()).contains(board);
 	}
 
 	@Test
@@ -103,8 +114,6 @@ class SolverTest {
 
 		assertThat(solver.isSolvable()).isTrue();
 		assertThat(solver.moves()).isEqualTo(10);
-		assertThat(solver.solution()).hasSize(10);
-		assertThat(solver.solution()).contains(board);
 	}
 
 	@Test
@@ -114,12 +123,6 @@ class SolverTest {
 
 		assertThat(solver.isSolvable()).isTrue();
 		assertThat(solver.moves()).isEqualTo(11);
-		assertThat(solver.solution()).hasSize(11);
-		assertThat(solver.solution()).contains(board);
-
-		for (Board b : solver.solution()) {
-			System.out.println(b);
-		}
 	}
 
 	@Test
@@ -129,12 +132,6 @@ class SolverTest {
 
 		assertThat(solver.isSolvable()).isTrue();
 		assertThat(solver.moves()).isEqualTo(15);
-		assertThat(solver.solution()).hasSize(15);
-		assertThat(solver.solution()).contains(board);
-
-		for (Board b : solver.solution()) {
-			System.out.println(b);
-		}
 	}
 
 	@Test
@@ -144,12 +141,6 @@ class SolverTest {
 
 		assertThat(solver.isSolvable()).isTrue();
 		assertThat(solver.moves()).isEqualTo(20);
-		assertThat(solver.solution()).hasSize(20);
-		assertThat(solver.solution()).contains(board);
-
-		for (Board b : solver.solution()) {
-			System.out.println(b);
-		}
 	}
 
 	@Test
@@ -159,7 +150,6 @@ class SolverTest {
 
 		assertThat(solver.isSolvable()).isTrue();
 		assertThat(solver.moves()).isEqualTo(0);
-		assertThat(solver.solution()).isEmpty();
 	}
 
 	@Test
@@ -169,18 +159,6 @@ class SolverTest {
 
 		assertThat(solver.isSolvable()).isTrue();
 		assertThat(solver.moves()).isEqualTo(2);
-		assertThat(solver.solution()).hasSize(2);
-		assertThat(solver.solution()).contains(board);
 	}
 
-//	@Test
-//	void puzzle4x4_20CanBeSolvedIn20Moves() {
-//		Board board = getBoardFromFile(FILE_PATH_FOLDER + "puzzle4x4-20.txt");
-//		Solver solver = new Solver(board);
-//
-//		assertThat(solver.isSolvable()).isTrue();
-//		assertThat(solver.moves()).isEqualTo(20);
-//		assertThat(solver.solution()).hasSize(20);
-//		assertThat(solver.solution()).contains(board);
-//	}
 }

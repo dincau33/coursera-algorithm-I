@@ -4,11 +4,10 @@ import edu.princeton.cs.algorithms.MinPQ;
 import edu.princeton.cs.introcs.In;
 import edu.princeton.cs.introcs.StdOut;
 
-import java.util.ArrayList;
+import java.util.Stack;
 
 public class Solver {
 
-	private final ArrayList<Board> boardsSequence = new ArrayList<>();
 	private final MinPQ<SearchNode> priorityQueue = new MinPQ<>();
 	private SearchNode current;
 
@@ -20,8 +19,6 @@ public class Solver {
 		current = new SearchNode(initial, null, 0);
 
 		while (!current.board.isGoal()) {
-			boardsSequence.add(current.board);
-
 			for (Board neighbor : current.board.neighbors()) {
 				if (current.previous == null || !neighbor.equals(current.previous.board)) {
 					SearchNode next = new SearchNode(neighbor, current, current.moves + 1);
@@ -47,7 +44,21 @@ public class Solver {
 
 	// sequence of boards in a shortest solution; null if unsolvable
 	public Iterable<Board> solution() {
-		return boardsSequence;
+		if (!isSolvable()) return null;
+
+		Stack<Board> stack = new Stack<>();
+		SearchNode node = current;
+		while (node != null) {
+			stack.push(node.board);
+			node = node.previous;
+		}
+
+		Stack<Board> solution = new Stack<>();
+		while(!stack.empty()) {
+			solution.push(stack.pop());
+		}
+
+		return solution;
 	}
 
 	// solve a slider puzzle (given below)

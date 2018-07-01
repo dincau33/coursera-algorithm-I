@@ -18,8 +18,9 @@ public class Board {
 
 		validateBlocks(blocks);
 
-		this.blocks = blocks;
 		n = blocks.length;
+		this.blocks = getBlocksCopy(blocks);
+
 	}
 
 	private static void validateBlocks(int[][] blocks) {
@@ -99,12 +100,12 @@ public class Board {
 		return isGoal;
 	}
 
-	private int[][] getBlocksCopy() {
+	private int[][] getBlocksCopy(int[][] bs) {
 		int[][] blocksCopy = new int[n][n];
 
 		for (int i = 0; i < n; i++) {
 			for (int j = 0; j < n; j++) {
-				blocksCopy[i][j] = blocks[i][j];
+				blocksCopy[i][j] = bs[i][j];
 			}
 		}
 
@@ -145,7 +146,7 @@ public class Board {
 			}
 		}
 
-		int[][] twinBlocks = getBlocksCopy();
+		int[][] twinBlocks = getBlocksCopy(blocks);
 		exchBlock(twinBlocks, sourceRow, sourceCol, targetRow, targetCol);
 
 		return new Board(twinBlocks);
@@ -193,28 +194,28 @@ public class Board {
 
 		// Create neighbor by swapping empty block left
 		if (emptyBlockCol > 0) {
-			int[][] blocksCopy = getBlocksCopy();
+			int[][] blocksCopy = getBlocksCopy(blocks);
 			exchBlock(blocksCopy, emptyBlockRow, emptyBlockCol, emptyBlockRow, emptyBlockCol - 1);
 			neighbors.add(new Board(blocksCopy));
 		}
 
 		// Create neighbor by swapping empty block right
 		if (emptyBlockCol < n - 1) {
-			int[][] blocksCopy = getBlocksCopy();
+			int[][] blocksCopy = getBlocksCopy(blocks);
 			exchBlock(blocksCopy, emptyBlockRow, emptyBlockCol, emptyBlockRow, emptyBlockCol + 1);
 			neighbors.add(new Board(blocksCopy));
 		}
 
 		// Create neighbor by swapping empty block up
 		if (emptyBlockRow > 0) {
-			int[][] blocksCopy = getBlocksCopy();
+			int[][] blocksCopy = getBlocksCopy(blocks);
 			exchBlock(blocksCopy, emptyBlockRow, emptyBlockCol, emptyBlockRow - 1, emptyBlockCol);
 			neighbors.add(new Board(blocksCopy));
 		}
 
 		// Create neighbor by swapping empty block down
 		if (emptyBlockRow < n - 1) {
-			int[][] blocksCopy = getBlocksCopy();
+			int[][] blocksCopy = getBlocksCopy(blocks);
 			exchBlock(blocksCopy, emptyBlockRow, emptyBlockCol, emptyBlockRow + 1, emptyBlockCol);
 			neighbors.add(new Board(blocksCopy));
 		}
