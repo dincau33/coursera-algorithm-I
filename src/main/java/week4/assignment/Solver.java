@@ -46,13 +46,8 @@ public class Solver {
 
 	// is the initial board solvable?
 	public boolean isSolvable() {
-		if (current.board.isGoal()) {
-			return true;
-		}
-		if (twinCurrent.board.isGoal()) {
-			return false;
-		}
-
+		if (current.board.isGoal()) return true;
+		if (twinCurrent.board.isGoal()) return false;
 		return false;
 	}
 

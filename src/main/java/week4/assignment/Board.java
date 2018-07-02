@@ -6,14 +6,14 @@ import java.util.Stack;
 
 public class Board {
 
+	private static final int BOARD_MINIMAL_SIZE = 2;
+	private static final int BOARD_MAXIMUM_SIZE = 127;
+
 	private final int[][] blocks;
 	private final int n;
 	private int hamming = -1;
 	private int manhattan = -1;
 	private Board twin = null;
-
-	private static final int BOARD_MINIMAL_SIZE = 2;
-	private static final int BOARD_MAXIMUM_SIZE = 127;
 
 	// construct a blocks from an n-by-n array of blocks
 	// (where blocks[i][j] = block in row i, column j)
@@ -38,19 +38,14 @@ public class Board {
 	}
 
 	private boolean matchGoalBlock(int row, int col) {
-		if (row == n - 1 && col == n - 1) {
-			return blocks[row][col] == 0;
-		} else {
-			return blocks[row][col] == row * n + col + 1;
-		}
+		if (row == n - 1 && col == n - 1) return blocks[row][col] == 0;
+		else return blocks[row][col] == row * n + col + 1;
 	}
 
 	// number of blocks out of place
 	public int hamming() {
 		// caching
-		if (hamming != -1) {
-			return hamming;
-		}
+		if (hamming != -1) return hamming;
 
 		int tmp = 0;
 		for (int i = 0; i < n; i++) {
@@ -73,9 +68,7 @@ public class Board {
 	// sum of Manhattan distances between blocks and goal
 	public int manhattan() {
 		//caching
-		if (manhattan != -1) {
-			return manhattan;
-		}
+		if (manhattan != -1) return manhattan;
 
 		int tmp = 0;
 		for (int i = 0; i < n; i++) {
@@ -123,6 +116,7 @@ public class Board {
 
 	// a blocks that is obtained by exchanging any pair of blocks
 	public Board twin() {
+		// caching
 		if (twin != null) return twin;
 
 		// Find source block to swap
@@ -168,9 +162,7 @@ public class Board {
 
 		for (int i = 0; i < n; i++) {
 			for (int j = 0; j < n; j++) {
-				if (that.blocks[i][j] != this.blocks[i][j]) {
-					return false;
-				}
+				if (that.blocks[i][j] != this.blocks[i][j]) return false;
 			}
 		}
 
