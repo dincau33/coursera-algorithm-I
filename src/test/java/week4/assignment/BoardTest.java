@@ -157,6 +157,13 @@ class BoardTest {
 	}
 
 	@Test
+	void twinOfPuzzle3x3_00ReturnTheSameBoard() {
+		Board board = getBoardFromFile(FILE_PATH_FOLDER + "puzzle3x3-00.txt");
+		Board twinBoard = board.twin();
+		assertThat(twinBoard.equals(board.twin())).isTrue();
+	}
+
+	@Test
 	void hammingOfPuzzle3x3_00AfterTwinGenerationIs2(){
 		Board board = getBoardFromFile(FILE_PATH_FOLDER + "puzzle3x3-00.txt");
 		assertThat(board.twin().hamming()).isEqualTo(2);

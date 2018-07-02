@@ -10,6 +10,10 @@ public class Board {
 	private final int n;
 	private int hamming = -1;
 	private int manhattan = -1;
+	private Board twin = null;
+
+	private static final int BOARD_MINIMAL_SIZE = 2;
+	private static final int BOARD_MAXIMUM_SIZE = 127;
 
 	// construct a blocks from an n-by-n array of blocks
 	// (where blocks[i][j] = block in row i, column j)
@@ -24,8 +28,8 @@ public class Board {
 
 	private static void validateBlocks(int[][] blocks) {
 		if (blocks == null) throw new IllegalArgumentException();
-		if (blocks.length < 2) throw new IllegalArgumentException();
-		if (blocks.length > 127) throw new IllegalArgumentException();
+		if (blocks.length < BOARD_MINIMAL_SIZE) throw new IllegalArgumentException();
+		if (blocks.length > BOARD_MAXIMUM_SIZE) throw new IllegalArgumentException();
 	}
 
 	// blocks dimension n
@@ -119,6 +123,7 @@ public class Board {
 
 	// a blocks that is obtained by exchanging any pair of blocks
 	public Board twin() {
+		if (twin != null) return twin;
 
 		// Find source block to swap
 		boolean sourceBlockSelected = false;
@@ -144,8 +149,9 @@ public class Board {
 
 		int[][] twinBlocks = getBlocksCopy(blocks);
 		exchBlock(twinBlocks, sourceRow, sourceCol, targetRow, targetCol);
+		twin = new Board(twinBlocks);
 
-		return new Board(twinBlocks);
+		return twin;
 	}
 
 	// does this blocks equal y?
