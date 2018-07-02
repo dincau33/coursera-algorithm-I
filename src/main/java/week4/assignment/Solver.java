@@ -4,12 +4,13 @@ import edu.princeton.cs.algorithms.MinPQ;
 import edu.princeton.cs.introcs.In;
 import edu.princeton.cs.introcs.StdOut;
 
-import java.util.Stack;
+import java.util.ArrayList;
+import java.util.Collections;
 
 public class Solver {
 
-	private final MinPQ<SearchNode> priorityQueue = new MinPQ<>();
 	private SearchNode current;
+	private SearchNode twinCurrent;
 
 	// find a solution to the initial board (using the A* algorithm)
 	public Solver(Board initial) {
@@ -17,8 +18,12 @@ public class Solver {
 		if (initial == null) throw new IllegalArgumentException();
 
 		current = new SearchNode(initial, null, 0);
+		twinCurrent = new SearchNode(initial.twin(), null, 0);
 
-		while (!current.board.isGoal()) {
+		MinPQ<SearchNode> priorityQueue = new MinPQ<>();
+		MinPQ<SearchNode> twinPriorityQueue = new MinPQ<>();
+
+		while (!current.board.isGoal() && !twinCurrent.board.isGoal()) {
 			for (Board neighbor : current.board.neighbors()) {
 				if (current.previous == null || !neighbor.equals(current.previous.board)) {
 					SearchNode next = new SearchNode(neighbor, current, current.moves + 1);
@@ -26,14 +31,29 @@ public class Solver {
 				}
 			}
 
+			for (Board neighbor : twinCurrent.board.neighbors()) {
+				if (twinCurrent.previous == null || !neighbor.equals(twinCurrent.previous.board)) {
+					SearchNode next = new SearchNode(neighbor, twinCurrent, twinCurrent.moves + 1);
+					twinPriorityQueue.insert(next);
+				}
+			}
+
 			current = priorityQueue.delMin();
+			twinCurrent = twinPriorityQueue.delMin();
 		}
 
 	}
 
 	// is the initial board solvable?
 	public boolean isSolvable() {
-		return true;
+		if (current.board.isGoal()) {
+			return true;
+		}
+		if (twinCurrent.board.isGoal()) {
+			return false;
+		}
+
+		return false;
 	}
 
 	// min number of moves to solve initial board; -1 if unsolvable
@@ -46,17 +66,13 @@ public class Solver {
 	public Iterable<Board> solution() {
 		if (!isSolvable()) return null;
 
-		Stack<Board> stack = new Stack<>();
+		ArrayList<Board> solution = new ArrayList<>();
 		SearchNode node = current;
 		while (node != null) {
-			stack.push(node.board);
+			solution.add(node.board);
 			node = node.previous;
 		}
-
-		Stack<Board> solution = new Stack<>();
-		while(!stack.empty()) {
-			solution.push(stack.pop());
-		}
+		Collections.reverse(solution);
 
 		return solution;
 	}

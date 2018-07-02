@@ -54,6 +54,16 @@ class SolverTest {
 	}
 
 	@Test
+	void puzzle2x2_unsolvable1IsNotSolvable() {
+		Board board = getBoardFromFile(FILE_PATH_FOLDER + "puzzle2x2-unsolvable1.txt");
+		Solver solver = new Solver(board);
+
+		assertThat(solver.isSolvable()).isFalse();
+		assertThat(solver.moves()).isEqualTo(-1);
+		assertThat(solver.solution()).isNull();
+	}
+
+	@Test
 	void puzzle3x3_00IsAlreadySolved() {
 		Board board = getBoardFromFile(FILE_PATH_FOLDER + "puzzle3x3-00.txt");
 		Solver solver = new Solver(board);
@@ -144,6 +154,15 @@ class SolverTest {
 	}
 
 	@Test
+	void puzzle3x3_31CanBeSolvedIn31Moves() {
+		Board board = getBoardFromFile(FILE_PATH_FOLDER + "puzzle3x3-31.txt");
+		Solver solver = new Solver(board);
+
+		assertThat(solver.isSolvable()).isTrue();
+		assertThat(solver.moves()).isEqualTo(31);
+	}
+
+	@Test
 	void puzzle4x4_00IsAlreadySolved() {
 		Board board = getBoardFromFile(FILE_PATH_FOLDER + "puzzle4x4-00.txt");
 		Solver solver = new Solver(board);
@@ -159,6 +178,24 @@ class SolverTest {
 
 		assertThat(solver.isSolvable()).isTrue();
 		assertThat(solver.moves()).isEqualTo(2);
+	}
+
+	@Test
+	void puzzle4x4_10CanBeSolvedIn40Moves() {
+		Board board = getBoardFromFile(FILE_PATH_FOLDER + "puzzle4x4-10.txt");
+		Solver solver = new Solver(board);
+
+		assertThat(solver.isSolvable()).isTrue();
+		assertThat(solver.moves()).isEqualTo(10);
+	}
+
+	@Test
+	void puzzle4x4_20CanBeSolvedIn20Moves() {
+		Board board = getBoardFromFile(FILE_PATH_FOLDER + "puzzle4x4-20.txt");
+		Solver solver = new Solver(board);
+
+		assertThat(solver.isSolvable()).isTrue();
+		assertThat(solver.moves()).isEqualTo(20);
 	}
 
 }

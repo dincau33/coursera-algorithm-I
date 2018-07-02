@@ -10,7 +10,6 @@ public class Board {
 	private final int n;
 	private int hamming = -1;
 	private int manhattan = -1;
-	private final Board twin = null;
 
 	// construct a blocks from an n-by-n array of blocks
 	// (where blocks[i][j] = block in row i, column j)
@@ -120,17 +119,14 @@ public class Board {
 
 	// a blocks that is obtained by exchanging any pair of blocks
 	public Board twin() {
-//		if (twin != null) {
-//			return twin;
-//		}
 
 		// Find source block to swap
 		boolean sourceBlockSelected = false;
 		int sourceRow = -1;
 		int sourceCol = -1;
 		while (!sourceBlockSelected) {
-			sourceRow = StdRandom.uniform(n - 1);
-			sourceCol = StdRandom.uniform(n - 1);
+			sourceRow = StdRandom.uniform(n);
+			sourceCol = StdRandom.uniform(n);
 			if (blocks[sourceRow][sourceCol] != 0) sourceBlockSelected = true;
 		}
 
@@ -139,10 +135,10 @@ public class Board {
 		int targetRow = -1;
 		int targetCol = -1;
 		while (!targetBlockSelected) {
-			targetRow = StdRandom.uniform(n - 1);
-			targetCol = StdRandom.uniform(n - 1);
-			if (targetRow != sourceRow && targetCol != sourceCol) {
-				if (blocks[targetRow][targetCol] != 0) targetBlockSelected = true;
+			targetRow = StdRandom.uniform(n);
+			targetCol = StdRandom.uniform(n);
+			if ((targetRow != sourceRow || targetCol != sourceCol) && blocks[targetRow][targetCol] != 0) {
+				targetBlockSelected = true;
 			}
 		}
 
