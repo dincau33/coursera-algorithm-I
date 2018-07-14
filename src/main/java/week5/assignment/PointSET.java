@@ -6,27 +6,27 @@ import java.util.TreeSet;
 
 public class PointSET {
 
-	private int size = 0;
-	private TreeSet<Point2D> set = null;
+	private TreeSet<Point2D> set;
 
 	// construct an empty set of points
 	public PointSET() {
-
+		set = new TreeSet<>();
 	}
 
 	// is the set empty?
 	public boolean isEmpty() {
-		return true;
+		return set.isEmpty();
 	}
 
 	// number of points in the set
 	public int size() {
-		return size;
+		return set.size();
 	}
 
 	// add the point to the set (if it is not already in the set)
 	public void insert(Point2D p) {
-
+		if (p == null) throw new IllegalArgumentException();
+		set.add(p);
 	}
 
 	// does the set contain point p?
@@ -36,7 +36,9 @@ public class PointSET {
 
 	// draw all points to standard draw
 	public void draw() {
-
+		for(Point2D p : set){
+			p.draw();
+		}
 	}
 
 	// all points that are inside the rectangle (or on the boundary)
