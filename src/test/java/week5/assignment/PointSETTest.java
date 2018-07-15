@@ -3,6 +3,7 @@ package week5.assignment;
 import edu.princeton.cs.algorithms.Point2D;
 import edu.princeton.cs.introcs.In;
 import org.junit.jupiter.api.Test;
+import week3.assignment.Point;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -61,7 +62,7 @@ class PointSETTest {
 	}
 
 	@Test
-	void queryRectangleContains2PointsOfCicle4PointSET() {
+	void queryRectangleContains2PointsOfCircle4PointSET() {
 		PointSET set = getSetFromFile(FILE_PATH_FOLDER + "circle4.txt");
 		RectHV rec = new RectHV(0.2, 0.2, 1.0, 1.0);
 		Iterable<Point2D> pts = set.range(rec);
@@ -72,7 +73,7 @@ class PointSETTest {
 	}
 
 	@Test
-	void queryRectangleContains4PointsOfCicle4PointSET() {
+	void queryRectangleContains4PointsOfCircle4PointSET() {
 		PointSET set = getSetFromFile(FILE_PATH_FOLDER + "circle4.txt");
 		RectHV rec = new RectHV(0.0, 0.0, 1.0, 1.0);
 		Iterable<Point2D> pts = set.range(rec);
@@ -83,7 +84,7 @@ class PointSETTest {
 	}
 
 	@Test
-	void queryRectangleContainsNoPointsOfCicle4PointSET() {
+	void queryRectangleContainsNoPointsOfCircle4PointSET() {
 		PointSET set = getSetFromFile(FILE_PATH_FOLDER + "circle4.txt");
 		RectHV rec = new RectHV(0.2, 0.2, 0.3, 0.3);
 		Iterable<Point2D> pts = set.range(rec);
@@ -103,6 +104,36 @@ class PointSETTest {
 	void failToFindNearestPointOfNullPoint() {
 		PointSET set = new PointSET();
 		assertThrows(IllegalArgumentException.class, () -> set.nearest(null));
+	}
+
+	@Test
+	void nearestPointOfEmptySetIsNull() {
+		PointSET set = new PointSET();
+		Point2D p = new Point2D(0.0, 0.0);
+		assertThat(set.nearest(p)).isNull();
+	}
+
+	@Test
+	void nearestPointOfX05Y10IsItselfForCircle4PointSET(){
+		PointSET set = getSetFromFile(FILE_PATH_FOLDER + "circle4.txt");
+		Point2D p = new Point2D(0.5, 1.0);
+		assertThat(set.nearest(p)).isEqualByComparingTo(p);
+	}
+
+	@Test
+	void nearestPointOfX01Y05IsX00Y05ForCircle4PointSET(){
+		PointSET set = getSetFromFile(FILE_PATH_FOLDER + "circle4.txt");
+		Point2D p = new Point2D(0.1, 0.5);
+		Point2D expectedP = new Point2D(0.0, 0.5);
+		assertThat(set.nearest(p)).isEqualByComparingTo(expectedP);
+	}
+
+	@Test
+	void nearestPointOfX10Y04IsX10Y05ForCircle4PointSET(){
+		PointSET set = getSetFromFile(FILE_PATH_FOLDER + "circle4.txt");
+		Point2D p = new Point2D(1.0, 0.4);
+		Point2D expectedP = new Point2D(1.0, 0.5);
+		assertThat(set.nearest(p)).isEqualByComparingTo(expectedP);
 	}
 
 }

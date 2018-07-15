@@ -55,7 +55,13 @@ public class PointSET {
 	// a nearest neighbor in the set to point p; null if the set is empty
 	public Point2D nearest(Point2D p) {
 		if (p == null) throw new IllegalArgumentException();
-		return null;
+		Point2D nearest = null;
+		for (Point2D pt : set) {
+			if (nearest == null || pt.distanceSquaredTo(p) < nearest.distanceSquaredTo(p)) {
+				nearest = pt;
+			}
+		}
+		return nearest;
 	}
 
 }
