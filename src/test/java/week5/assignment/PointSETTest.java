@@ -3,8 +3,6 @@ package week5.assignment;
 import edu.princeton.cs.algorithms.Point2D;
 import edu.princeton.cs.introcs.In;
 import org.junit.jupiter.api.Test;
-import week3.assignment.Point;
-import week4.assignment.Board;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -62,5 +60,49 @@ class PointSETTest {
 		assertThat(set.contains(p5)).isFalse();
 	}
 
+	@Test
+	void queryRectangleContains2PointsOfCicle4PointSET() {
+		PointSET set = getSetFromFile(FILE_PATH_FOLDER + "circle4.txt");
+		RectHV rec = new RectHV(0.2, 0.2, 1.0, 1.0);
+		Iterable<Point2D> pts = set.range(rec);
+		assertThat(pts).contains(new Point2D(0.5, 1.0));
+		assertThat(pts).contains(new Point2D(1.0, 0.5));
+		assertThat(pts).doesNotContain(new Point2D(0.0, 0.5));
+		assertThat(pts).doesNotContain(new Point2D(0.5, 0.0));
+	}
+
+	@Test
+	void queryRectangleContains4PointsOfCicle4PointSET() {
+		PointSET set = getSetFromFile(FILE_PATH_FOLDER + "circle4.txt");
+		RectHV rec = new RectHV(0.0, 0.0, 1.0, 1.0);
+		Iterable<Point2D> pts = set.range(rec);
+		assertThat(pts).contains(new Point2D(0.5, 1.0));
+		assertThat(pts).contains(new Point2D(1.0, 0.5));
+		assertThat(pts).contains(new Point2D(0.0, 0.5));
+		assertThat(pts).contains(new Point2D(0.5, 0.0));
+	}
+
+	@Test
+	void queryRectangleContainsNoPointsOfCicle4PointSET() {
+		PointSET set = getSetFromFile(FILE_PATH_FOLDER + "circle4.txt");
+		RectHV rec = new RectHV(0.2, 0.2, 0.3, 0.3);
+		Iterable<Point2D> pts = set.range(rec);
+		assertThat(pts).doesNotContain(new Point2D(0.5, 1.0));
+		assertThat(pts).doesNotContain(new Point2D(1.0, 0.5));
+		assertThat(pts).doesNotContain(new Point2D(0.0, 0.5));
+		assertThat(pts).doesNotContain(new Point2D(0.5, 0.0));
+	}
+
+	@Test
+	void failToFindPointsIfQueryRectangleIsNull() {
+		PointSET set = new PointSET();
+		assertThrows(IllegalArgumentException.class, () -> set.range(null));
+	}
+
+	@Test
+	void failToFindNearestPointOfNullPoint() {
+		PointSET set = new PointSET();
+		assertThrows(IllegalArgumentException.class, () -> set.nearest(null));
+	}
 
 }

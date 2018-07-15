@@ -1,6 +1,8 @@
 package week5.assignment;
 
 import edu.princeton.cs.algorithms.Point2D;
+import edu.princeton.cs.algorithms.Stack;
+
 import java.util.TreeSet;
 
 public class PointSET {
@@ -35,19 +37,25 @@ public class PointSET {
 
 	// draw all points to standard draw
 	public void draw() {
-		for(Point2D p : set){
+		for (Point2D p : set) {
 			p.draw();
 		}
 	}
 
 	// all points that are inside the rectangle (or on the boundary)
 	public Iterable<Point2D> range(RectHV rect) {
-		return null;
+		if (rect == null) throw new IllegalArgumentException();
+		Stack<Point2D> pts = new Stack<>();
+		for (Point2D p : set) {
+			if (rect.contains(p)) pts.push(p);
+		}
+		return pts;
 	}
 
 	// a nearest neighbor in the set to point p; null if the set is empty
 	public Point2D nearest(Point2D p) {
-		return new Point2D(0, 0);
+		if (p == null) throw new IllegalArgumentException();
+		return null;
 	}
 
 }
