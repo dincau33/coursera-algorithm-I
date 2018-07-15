@@ -1,13 +1,10 @@
 package week5.assignment;
 
 import edu.princeton.cs.algorithms.Point2D;
-
-import java.util.ArrayList;
 import java.util.TreeSet;
 
 public class KdTree {
 
-	private int size = 0;
 	private TreeSet<Point2D> set = null;
 
 	// construct an empty set of points
@@ -22,7 +19,7 @@ public class KdTree {
 
 	// number of points in the set
 	public int size() {
-		return size;
+		return set.size();
 	}
 
 	// add the point to the set (if it is not already in the set)
@@ -42,7 +39,7 @@ public class KdTree {
 
 	// all points that are inside the rectangle (or on the boundary)
 	public Iterable<Point2D> range(RectHV rect) {
-		return new ArrayList<>();
+		return null;
 	}
 
 	// a nearest neighbor in the set to point p; null if the set is empty

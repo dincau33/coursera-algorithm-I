@@ -1,7 +1,6 @@
 package week5.assignment;
 
 import edu.princeton.cs.algorithms.Point2D;
-import java.util.ArrayList;
 import java.util.TreeSet;
 
 public class PointSET {
@@ -31,7 +30,7 @@ public class PointSET {
 
 	// does the set contain point p?
 	public boolean contains(Point2D p) {
-		return false;
+		return set.contains(p);
 	}
 
 	// draw all points to standard draw
@@ -43,7 +42,7 @@ public class PointSET {
 
 	// all points that are inside the rectangle (or on the boundary)
 	public Iterable<Point2D> range(RectHV rect) {
-		return new ArrayList<>();
+		return null;
 	}
 
 	// a nearest neighbor in the set to point p; null if the set is empty
