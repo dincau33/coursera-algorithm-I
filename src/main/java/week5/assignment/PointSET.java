@@ -7,7 +7,7 @@ import java.util.TreeSet;
 
 public class PointSET {
 
-	private TreeSet<Point2D> set;
+	private final TreeSet<Point2D> set;
 
 	// construct an empty set of points
 	public PointSET() {
@@ -32,6 +32,7 @@ public class PointSET {
 
 	// does the set contain point p?
 	public boolean contains(Point2D p) {
+		if (p == null) throw new IllegalArgumentException();
 		return set.contains(p);
 	}
 
