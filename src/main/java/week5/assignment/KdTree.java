@@ -2,12 +2,11 @@ package week5.assignment;
 
 import edu.princeton.cs.algorithms.Point2D;
 import edu.princeton.cs.algorithms.Stack;
-import week3.assignment.Point;
 
 public class KdTree {
 
-	private static final boolean VERTICAL_LINE = true;
-	private static final boolean HORIZONTAL_LINE = false;
+	private static final boolean VERTICAL = true;
+	private static final boolean HORIZONTAL = false;
 
 	private int size = 0;
 	private KdNode root = null;
@@ -17,9 +16,7 @@ public class KdTree {
 	}
 
 	// is the set empty?
-	public boolean isEmpty() {
-		return true;
-	}
+	public boolean isEmpty() { return root == null; }
 
 	// number of points in the set
 	public int size() {
@@ -29,10 +26,10 @@ public class KdTree {
 	// add the point to the set (if it is not already in the set)
 	public void insert(Point2D p) {
 		if (p == null) throw new IllegalArgumentException();
-		root = insert(root, p, VERTICAL_LINE);
+		root = insert(root, p, VERTICAL);
 	}
 
-	private KdNode insert(KdNode node, Point2D p, boolean line) {
+	private KdNode insert(KdNode node, Point2D p, boolean direction) {
 		if (node == null) {
 			size++;
 			return new KdNode(p);
@@ -40,19 +37,19 @@ public class KdTree {
 
 		if (node.p.equals(p)) return node;
 
-		if (line == VERTICAL_LINE) {
+		if (direction == VERTICAL) {
 			if (p.x() < node.p.x()) {
-				node.left = insert(node.left, p, HORIZONTAL_LINE);
+				node.left = insert(node.left, p, HORIZONTAL);
 			} else {
-				node.right = insert(node.right, p, HORIZONTAL_LINE);
+				node.right = insert(node.right, p, HORIZONTAL);
 			}
 		}
 
-		if (line == HORIZONTAL_LINE) {
+		if (direction == HORIZONTAL) {
 			if (p.y() < node.p.y()) {
-				node.left = insert(node.left, p, VERTICAL_LINE);
+				node.left = insert(node.left, p, VERTICAL);
 			} else {
-				node.right = insert(node.right, p, VERTICAL_LINE);
+				node.right = insert(node.right, p, VERTICAL);
 			}
 		}
 
@@ -62,26 +59,26 @@ public class KdTree {
 	// does the set contain point p?
 	public boolean contains(Point2D p) {
 		if (p == null) throw new IllegalArgumentException();
-		return contains(root, p, VERTICAL_LINE);
+		return contains(root, p, VERTICAL);
 	}
 
-	private boolean contains(KdNode node, Point2D p, boolean line) {
+	private boolean contains(KdNode node, Point2D p, boolean direction) {
 		if (node != null) {
 			if (node.p.equals(p)) return true;
 
-			if (line == VERTICAL_LINE) {
+			if (direction == VERTICAL) {
 				if (p.x() < node.p.x()) {
-					return contains(node.left, p, HORIZONTAL_LINE);
+					return contains(node.left, p, HORIZONTAL);
 				} else {
-					return contains(node.right, p, HORIZONTAL_LINE);
+					return contains(node.right, p, HORIZONTAL);
 				}
 			}
 
-			if (line == HORIZONTAL_LINE) {
+			if (direction == HORIZONTAL) {
 				if (p.y() < node.p.y()) {
-					return contains(node.left, p, VERTICAL_LINE);
+					return contains(node.left, p, VERTICAL);
 				} else {
-					return contains(node.right, p, VERTICAL_LINE);
+					return contains(node.right, p, VERTICAL);
 				}
 			}
 		}
@@ -96,30 +93,30 @@ public class KdTree {
 	public Iterable<Point2D> range(RectHV rect) {
 		if (rect == null) throw new IllegalArgumentException();
 		Stack<Point2D> pts = new Stack<>();
-		range(root, rect, VERTICAL_LINE, pts);
+		range(root, rect, VERTICAL, pts);
 		return pts;
 	}
 
-	private void range(KdNode node, RectHV rect, boolean line, Stack<Point2D> pts) {
-		if (node != null) {
-			if (rect.contains(node.p)) pts.push(node.p);
+	private void range(KdNode node, RectHV rect, boolean direction, Stack<Point2D> pts) {
+		if (node == null) return;
 
-			if (line == VERTICAL_LINE) {
-				if (rect.xmin() < node.p.x()) {
-					range(node.left, rect, HORIZONTAL_LINE, pts);
-				}
-				if (rect.xmax() >= node.p.x()) {
-					range(node.right, rect, HORIZONTAL_LINE, pts);
-				}
+		if (rect.contains(node.p)) pts.push(node.p);
+
+		if (direction == VERTICAL) {
+			if (rect.xmin() < node.p.x()) {
+				range(node.left, rect, HORIZONTAL, pts);
 			}
+			if (rect.xmax() >= node.p.x()) {
+				range(node.right, rect, HORIZONTAL, pts);
+			}
+		}
 
-			if (line == HORIZONTAL_LINE) {
-				if (rect.ymin() < node.p.y()) {
-					range(node.left, rect, VERTICAL_LINE, pts);
-				}
-				if (rect.ymax() >= node.p.y()) {
-					range(node.right, rect, VERTICAL_LINE, pts);
-				}
+		if (direction == HORIZONTAL) {
+			if (rect.ymin() < node.p.y()) {
+				range(node.left, rect, VERTICAL, pts);
+			}
+			if (rect.ymax() >= node.p.y()) {
+				range(node.right, rect, VERTICAL, pts);
 			}
 		}
 	}
@@ -127,49 +124,49 @@ public class KdTree {
 	// a nearest neighbor in the set to point p; null if the set is empty
 	public Point2D nearest(Point2D p) {
 		if (p == null) throw new IllegalArgumentException();
-		return nearest(root, p, VERTICAL_LINE);
+		return nearest(root, p, VERTICAL, root);
 	}
 
-	private Point2D nearest(KdNode node, Point2D p, boolean line) {
-//		if (node != null) {
-//			if (node.p.equals(p)) return node.p;
-//
-//			if (line == VERTICAL_LINE) {
-//				if (p.x() < node.p.x()) {
-//					Point2D nearest = nearest(node.left, p, HORIZONTAL_LINE);
-//					if (p.distanceSquaredTo(node.p) < p.distanceTo(nearest)) {
-//						return node.p;
-//					} else {
-//						return nearest;
-//					}
-//				} else {
-//					Point2D nearest = nearest(node.right, p, HORIZONTAL_LINE);
-//					if (p.distanceSquaredTo(node.p) < p.distanceTo(nearest)) {
-//						return node.p;
-//					} else {
-//						return nearest;
-//					}
-//				}
-//			}
-//
-//			if (line == HORIZONTAL_LINE) {
-//				if (p.y() < node.p.y()) {
-//					Point2D nearest = nearest(node.left, p, HORIZONTAL_LINE);
-//					if (p.distanceSquaredTo(node.p) < p.distanceTo(nearest)) {
-//						return node.p;
-//					} else {
-//						return nearest;
-//					}
-//				} else {
-//					Point2D nearest = nearest(node.right, p, HORIZONTAL_LINE);
-//					if (p.distanceSquaredTo(node.p) < p.distanceTo(nearest)) {
-//						return node.p;
-//					} else {
-//						return nearest;
-//					}
-//				}
-//			}
-//		}
+	private Point2D nearest(KdNode node, Point2D p, boolean direction, KdNode current) {
+		if (node != null) {
+			if (node.p.equals(p)) return node.p;
+
+			if (direction == VERTICAL) {
+				if (p.x() < node.p.x()) {
+					if (node.left == null) return current.p;
+					if (p.distanceSquaredTo(node.left.p) < p.distanceSquaredTo(current.p)) {
+						return nearest(node.left, p, HORIZONTAL, node.left);
+					} else {
+						return nearest(node.right, p, HORIZONTAL, current);
+					}
+				} else {
+					if (node.right == null) return current.p;
+					if (p.distanceSquaredTo(node.right.p) < p.distanceSquaredTo(current.p)) {
+						return nearest(node.right, p, HORIZONTAL, node.right);
+					} else {
+						return nearest(node.left, p, HORIZONTAL, current);
+					}
+				}
+			}
+
+			if (direction == HORIZONTAL) {
+				if (p.y() < node.p.y()) {
+					if (node.left == null) return current.p;
+					if (p.distanceSquaredTo(node.left.p) < p.distanceSquaredTo(current.p)) {
+						return nearest(node.left, p, VERTICAL, node.left);
+					} else {
+						return nearest(node.right, p, VERTICAL, current);
+					}
+				} else {
+					if (node.right == null) return current.p;
+					if (p.distanceSquaredTo(node.right.p) < p.distanceSquaredTo(current.p)) {
+						return nearest(node.right, p, VERTICAL, node.right);
+					} else {
+						return nearest(node.left, p, VERTICAL, current);
+					}
+				}
+			}
+		}
 
 		return null;
 	}
