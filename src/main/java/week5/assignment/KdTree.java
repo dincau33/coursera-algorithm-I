@@ -2,6 +2,7 @@ package week5.assignment;
 
 import edu.princeton.cs.algorithms.Point2D;
 import edu.princeton.cs.algorithms.Stack;
+import week3.assignment.Point;
 
 public class KdTree {
 
@@ -16,7 +17,9 @@ public class KdTree {
 	}
 
 	// is the set empty?
-	public boolean isEmpty() { return root == null; }
+	public boolean isEmpty() {
+		return root == null;
+	}
 
 	// number of points in the set
 	public int size() {
@@ -124,51 +127,53 @@ public class KdTree {
 	// a nearest neighbor in the set to point p; null if the set is empty
 	public Point2D nearest(Point2D p) {
 		if (p == null) throw new IllegalArgumentException();
-		return nearest(root, p, VERTICAL, root);
+		return nearest(root, p, VERTICAL, null);
 	}
 
-	private Point2D nearest(KdNode node, Point2D p, boolean direction, KdNode current) {
+	private Point2D nearest(KdNode node, Point2D p, boolean direction, Point2D nearest) {
 		if (node != null) {
+
 			if (node.p.equals(p)) return node.p;
 
+			if (nearest == null) nearest = node.p;
+			else {
+				if (node.p.distanceSquaredTo(p) < nearest.distanceSquaredTo(p)) nearest = node.p;
+			}
+
 			if (direction == VERTICAL) {
-				if (p.x() < node.p.x()) {
-					if (node.left == null) return current.p;
-					if (p.distanceSquaredTo(node.left.p) < p.distanceSquaredTo(current.p)) {
-						return nearest(node.left, p, HORIZONTAL, node.left);
-					} else {
-						return nearest(node.right, p, HORIZONTAL, current);
+				if (node.left != null && p.x() < node.p.x()) {
+					nearest = nearest(node.left, p, HORIZONTAL, nearest);
+					Point2D i = new Point2D(node.left.p.x(), node.p.y());
+					if (node.right != null && i.distanceSquaredTo(p) < nearest.distanceSquaredTo(p)) {
+						nearest = nearest(node.right, p, HORIZONTAL, nearest);
 					}
-				} else {
-					if (node.right == null) return current.p;
-					if (p.distanceSquaredTo(node.right.p) < p.distanceSquaredTo(current.p)) {
-						return nearest(node.right, p, HORIZONTAL, node.right);
-					} else {
-						return nearest(node.left, p, HORIZONTAL, current);
+				} else if (node.right != null) {
+					nearest = nearest(node.right, p, HORIZONTAL, nearest);
+					Point2D i = new Point2D(node.right.p.x(), node.p.y());
+					if (node.left != null && i.distanceSquaredTo(p) < nearest.distanceSquaredTo(p)) {
+						nearest = nearest(node.left, p, HORIZONTAL, nearest);
 					}
 				}
 			}
 
 			if (direction == HORIZONTAL) {
-				if (p.y() < node.p.y()) {
-					if (node.left == null) return current.p;
-					if (p.distanceSquaredTo(node.left.p) < p.distanceSquaredTo(current.p)) {
-						return nearest(node.left, p, VERTICAL, node.left);
-					} else {
-						return nearest(node.right, p, VERTICAL, current);
+				if (node.left != null && p.y() < node.p.y()) {
+					nearest = nearest(node.left, p, VERTICAL, nearest);
+					Point2D i = new Point2D(node.p.x(), node.left.p.y());
+					if (node.right != null && i.distanceSquaredTo(p) < nearest.distanceSquaredTo(p)) {
+						nearest = nearest(node.right, p, VERTICAL, nearest);
 					}
-				} else {
-					if (node.right == null) return current.p;
-					if (p.distanceSquaredTo(node.right.p) < p.distanceSquaredTo(current.p)) {
-						return nearest(node.right, p, VERTICAL, node.right);
-					} else {
-						return nearest(node.left, p, VERTICAL, current);
+				} else if (node.right != null) {
+					nearest = nearest(node.right, p, VERTICAL, nearest);
+					Point2D i = new Point2D(node.p.x(), node.right.p.y());
+					if (node.left != null && i.distanceSquaredTo(p) < nearest.distanceSquaredTo(p)) {
+						nearest = nearest(node.left, p, VERTICAL, nearest);
 					}
 				}
 			}
 		}
 
-		return null;
+		return nearest;
 	}
 
 	private class KdNode {
