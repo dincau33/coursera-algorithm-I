@@ -143,7 +143,7 @@ class KdTreeTest {
 	}
 
 	@Test
-	void nearestPointForTest5a(){
+	void nearestPointForTest5a2(){
 		KdTree set = new KdTree();
 		set.insert(new Point2D(0.372, 0.497));
 		set.insert(new Point2D(0.564, 0.413));
@@ -170,6 +170,19 @@ class KdTreeTest {
 		set.insert(new Point2D(0.5, 0.5));
 		Point2D p = new Point2D(0.875, 0.75);
 		Point2D expectedP = new Point2D(0.5, 0.5);
+		assertThat(set.nearest(p)).isEqualByComparingTo(expectedP);
+	}
+
+	@Test
+	void nearestPointForTest5a1(){
+		KdTree set = new KdTree();
+		set.insert(new Point2D(0.7, 0.2));
+		set.insert(new Point2D(0.5, 0.4));
+		set.insert(new Point2D(0.2, 0.3));
+		set.insert(new Point2D(0.4, 0.7));
+		set.insert(new Point2D(0.9, 0.6));
+		Point2D p = new Point2D(0.09, 0.482);
+		Point2D expectedP = new Point2D(0.2, 0.3);
 		assertThat(set.nearest(p)).isEqualByComparingTo(expectedP);
 	}
 

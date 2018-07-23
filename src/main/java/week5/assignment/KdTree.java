@@ -141,8 +141,10 @@ public class KdTree {
 			}
 
 			if (direction == VERTICAL) {
-				if (node.left != null && p.x() < node.p.x()) {
-					nearest = nearest(node.left, p, HORIZONTAL, nearest);
+				if (p.x() < node.p.x()) {
+					if (node.left != null) {
+						nearest = nearest(node.left, p, HORIZONTAL, nearest);
+					}
 					if (node.right != null) {
 						Point2D i = new Point2D(node.p.x(), node.right.p.y());
 						if (i.distanceSquaredTo(p) < nearest.distanceSquaredTo(p)) {
@@ -163,10 +165,12 @@ public class KdTree {
 			}
 
 			if (direction == HORIZONTAL) {
-				if (node.left != null && p.y() < node.p.y()) {
-					nearest = nearest(node.left, p, VERTICAL, nearest);
+				if (p.y() < node.p.y()) {
+					if (node.left != null) {
+						nearest = nearest(node.left, p, VERTICAL, nearest);
+					}
 					if (node.right != null) {
-						Point2D i = new Point2D(node.p.x(), node.right.p.y());
+						Point2D i = new Point2D(node.right.p.x(), node.p.y());
 						if (i.distanceSquaredTo(p) < nearest.distanceSquaredTo(p)) {
 							nearest = nearest(node.right, p, VERTICAL, nearest);
 						}
@@ -176,7 +180,7 @@ public class KdTree {
 						nearest = nearest(node.right, p, VERTICAL, nearest);
 					}
 					if (node.left != null) {
-						Point2D i = new Point2D(node.p.x(), node.left.p.y());
+						Point2D i = new Point2D(node.left.p.x(), node.p.y());
 						if (i.distanceSquaredTo(p) < nearest.distanceSquaredTo(p)) {
 							nearest = nearest(node.left, p, VERTICAL, nearest);
 						}
